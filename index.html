@@ -120,6 +120,7 @@
     .product-tile { position: relative; border-radius: 26px; overflow: hidden; background: var(--photo) center/cover; box-shadow: 0 18px 48px rgba(15,35,57,.14); transition: transform .25s ease; }
     .product-tile:hover { transform: translateY(-5px); }
     .product-tile.large { grid-row: span 2; }
+    .product-tile-carpet { background-position: center 62%; }
     .product-tile::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 25%, rgba(15,35,57,.88)); }
     .product-tile div { position: absolute; z-index: 2; left: 22px; right: 22px; bottom: 22px; color: var(--white); }
     .product-tile h3 { font-family: var(--serif); font-size: 30px; line-height: 1.02; margin-bottom: 6px; }
@@ -348,7 +349,7 @@
         </div>
 
         <div class="product-gallery">
-          <a class="product-tile large" href="#quote" style="--photo:url('https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1100&q=82')">
+          <a class="product-tile product-tile-carpet large" href="#quote" style="--photo:url('assets/plush-carpet-living-room.jpg')">
             <div><h3>Carpet</h3><p>Soft, warm, family-friendly comfort.</p></div>
           </a>
           <a class="product-tile" href="#quote" style="--photo:url('https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=900&q=82')">
