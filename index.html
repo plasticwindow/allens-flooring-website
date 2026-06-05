@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Allen's Carpet & Flooring | Free Flooring Estimates in Hannibal, MO</title>
+  <meta name="description" content="Allen's Carpet & Flooring in Hannibal, MO offers carpet, luxury vinyl plank, hardwood, laminate, tile, area rugs, free estimates, financing, current specials, and expert installation." />
+  <meta name="theme-color" content="#17314f" />
+  <meta property="og:title" content="Allen's Carpet & Flooring | Hannibal, MO" />
+  <meta property="og:description" content="Hannibal's trusted flooring showroom for carpet, luxury vinyl, hardwood, laminate, tile, area rugs, financing, free estimates, and expert installation." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://allenscarpetinc.com/" />
+
+  <style>
+    :root {
+      --navy: #17314f;
+      --navy-dark: #0f2339;
+      --navy-soft: #24496f;
+      --cream: #f7f1e8;
+      --cream-light: #fbf7f0;
+      --sand: #e9dac6;
+      --gold: #c99a43;
+      --gold-light: #e8c573;
+      --white: #ffffff;
+      --ink: #1b2531;
+      --muted: #687586;
+      --green: #287a54;
+      --blue: #245f9e;
+      --line: rgba(23, 49, 79, 0.14);
+      --shadow: 0 20px 60px rgba(15, 35, 57, 0.18);
+      --shadow-soft: 0 14px 34px rgba(15, 35, 57, 0.08);
+      --radius: 24px;
+      --serif: Georgia, "Times New Roman", serif;
+      --sans: Arial, Helvetica, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--sans); background: var(--white); color: var(--ink); line-height: 1.6; overflow-x: hidden; }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+    button, input, select, textarea { font: inherit; }
+
+    .container { width: min(1200px, calc(100% - 40px)); margin: 0 auto; }
+
+    .top-strip { background: var(--navy-dark); color: rgba(255,255,255,.9); font-size: 14px; font-weight: 800; letter-spacing: .02em; }
+    .top-strip .container { display: flex; justify-content: space-between; align-items: center; gap: 18px; padding: 10px 0; flex-wrap: wrap; }
+    .top-strip a { color: var(--gold-light); text-decoration: underline; text-underline-offset: 3px; }
+
+    header { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,.96); border-bottom: 1px solid var(--line); box-shadow: 0 8px 24px rgba(15,35,57,.08); backdrop-filter: blur(16px); }
+    .nav { min-height: 82px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .logo { display: flex; flex-direction: column; line-height: 1.05; min-width: 220px; }
+    .logo-main { font-family: var(--serif); font-weight: 800; color: var(--navy); font-size: 28px; letter-spacing: -.03em; }
+    .logo-main span { color: var(--gold); }
+    .logo-sub { color: var(--muted); text-transform: uppercase; font-size: 11px; font-weight: 900; letter-spacing: .16em; margin-top: 4px; }
+    .nav-links { display: flex; align-items: center; gap: 4px; list-style: none; }
+    .nav-links a { display: inline-flex; align-items: center; padding: 11px 12px; color: var(--navy); font-size: 13px; text-transform: uppercase; font-weight: 900; letter-spacing: .08em; border-radius: 999px; transition: background .2s ease, color .2s ease; }
+    .nav-links a:hover { background: var(--cream); color: var(--gold); }
+    .header-actions { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+    .phone-link { color: var(--navy); font-weight: 900; font-size: 17px; }
+
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 24px; border-radius: 999px; border: 2px solid transparent; font-weight: 900; text-transform: uppercase; letter-spacing: .08em; font-size: 13px; cursor: pointer; transition: transform .18s ease, box-shadow .18s ease, background .18s ease, color .18s ease; text-align: center; }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary { background: var(--gold); color: var(--white); box-shadow: 0 14px 30px rgba(201,154,67,.28); }
+    .btn-primary:hover { background: #d7a94f; }
+    .btn-blue { background: var(--navy); color: var(--white); box-shadow: 0 14px 30px rgba(23,49,79,.25); }
+    .btn-green { background: var(--green); color: var(--white); box-shadow: 0 14px 30px rgba(40,122,84,.25); }
+    .btn-outline { background: transparent; color: var(--white); border-color: rgba(255,255,255,.76); }
+    .btn-outline:hover { background: rgba(255,255,255,.12); }
+    .btn-outline-dark { background: transparent; color: var(--navy); border-color: var(--navy); }
+    .btn-outline-dark:hover { background: var(--navy); color: var(--white); }
+
+    .menu-toggle { display: none; width: 44px; height: 44px; border-radius: 12px; border: 1px solid var(--line); background: var(--white); color: var(--navy); align-items: center; justify-content: center; cursor: pointer; }
+    .menu-toggle span, .menu-toggle span::before, .menu-toggle span::after { display: block; width: 22px; height: 2px; background: currentColor; content: ""; position: relative; }
+    .menu-toggle span::before { position: absolute; top: -7px; }
+    .menu-toggle span::after { position: absolute; top: 7px; }
+    .mobile-menu { display: none; border-top: 1px solid var(--line); background: var(--white); padding: 10px 20px 22px; }
+    .mobile-menu.open { display: block; }
+    .mobile-menu a { display: block; padding: 12px 6px; border-bottom: 1px solid var(--line); color: var(--navy); font-weight: 900; text-transform: uppercase; font-size: 13px; letter-spacing: .08em; }
+
+    .hero { position: relative; min-height: 720px; color: var(--white); overflow: hidden; background: linear-gradient(90deg, rgba(15,35,57,.92) 0%, rgba(15,35,57,.78) 46%, rgba(15,35,57,.22) 100%), url("https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=1900&q=82") center/cover; }
+    .hero::after { content: ""; position: absolute; inset: auto 0 0; height: 120px; background: linear-gradient(180deg, rgba(255,255,255,0), var(--white)); pointer-events: none; }
+    .hero .container { position: relative; z-index: 2; min-height: 720px; display: grid; grid-template-columns: minmax(0, 720px) minmax(320px, 430px); gap: 44px; align-items: center; padding: 76px 0 118px; }
+    .eyebrow { color: var(--gold-light); font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: .18em; margin-bottom: 14px; display: block; }
+    .hero h1 { font-family: var(--serif); font-size: clamp(45px, 7vw, 84px); line-height: .96; letter-spacing: -.06em; max-width: 760px; margin-bottom: 24px; }
+    .hero h1 em { color: var(--gold-light); font-style: normal; }
+    .hero p { font-size: clamp(18px, 2vw, 22px); color: rgba(255,255,255,.86); max-width: 660px; margin-bottom: 30px; }
+    .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 30px; }
+    .hero-proof { display: grid; grid-template-columns: repeat(3, minmax(130px, 1fr)); gap: 12px; max-width: 700px; }
+    .proof { background: rgba(255,255,255,.13); border: 1px solid rgba(255,255,255,.18); border-radius: 18px; padding: 15px; backdrop-filter: blur(10px); }
+    .proof strong { display: block; font-size: 24px; line-height: 1.05; color: var(--white); }
+    .proof span { display: block; color: rgba(255,255,255,.75); font-size: 13px; font-weight: 800; margin-top: 4px; }
+
+    .quote-card { background: rgba(255,255,255,.98); color: var(--ink); border-radius: 28px; padding: 30px; box-shadow: var(--shadow); border-top: 7px solid var(--gold); }
+    .quote-card h2 { font-family: var(--serif); color: var(--navy); font-size: 34px; line-height: 1.04; letter-spacing: -.035em; margin-bottom: 8px; }
+    .quote-card p { color: var(--muted); font-size: 15px; margin-bottom: 16px; }
+    .quote-card form { display: grid; gap: 11px; }
+    input, select, textarea { width: 100%; border: 1px solid var(--line); background: #f8fbff; border-radius: 14px; padding: 13px 14px; color: var(--ink); outline: none; }
+    input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,154,67,.18); }
+    textarea { min-height: 94px; resize: vertical; }
+    .form-note { font-size: 12px; color: var(--muted); margin-top: 10px; }
+
+    .quick-actions { background: var(--white); border-bottom: 1px solid var(--line); padding: 20px 0; }
+    .quick-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .quick-card { display: flex; align-items: center; gap: 13px; background: var(--cream-light); border: 1px solid var(--line); border-radius: 18px; padding: 16px; font-weight: 900; color: var(--navy); box-shadow: 0 8px 22px rgba(15,35,57,.05); }
+    .quick-card span { width: 42px; height: 42px; border-radius: 14px; display: grid; place-items: center; background: var(--cream); color: var(--gold); font-weight: 900; flex: 0 0 auto; }
+
+    .finance-band { background: var(--navy); color: var(--white); padding: 36px 0; }
+    .finance-inner { display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: center; }
+    .finance-inner h2 { font-family: var(--serif); font-size: clamp(30px, 4vw, 46px); line-height: 1.05; letter-spacing: -.04em; margin-bottom: 8px; }
+    .finance-inner p { color: rgba(255,255,255,.78); font-size: 17px; }
+
+    section { padding: 88px 0; }
+    .section-head { display: flex; justify-content: space-between; align-items: end; gap: 32px; margin-bottom: 38px; }
+    .section-head h2 { font-family: var(--serif); color: var(--navy); font-size: clamp(36px, 4.7vw, 58px); line-height: 1.02; letter-spacing: -.05em; max-width: 680px; }
+    .section-head p { color: var(--muted); font-size: 17px; max-width: 540px; }
+
+    .products { background: var(--white); }
+    .product-gallery { display: grid; grid-template-columns: 1.1fr .9fr .9fr; grid-auto-rows: 255px; gap: 18px; }
+    .product-tile { position: relative; border-radius: 26px; overflow: hidden; background: var(--photo) center/cover; box-shadow: 0 18px 48px rgba(15,35,57,.14); transition: transform .25s ease; }
+    .product-tile:hover { transform: translateY(-5px); }
+    .product-tile.large { grid-row: span 2; }
+    .product-tile::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 25%, rgba(15,35,57,.88)); }
+    .product-tile div { position: absolute; z-index: 2; left: 22px; right: 22px; bottom: 22px; color: var(--white); }
+    .product-tile h3 { font-family: var(--serif); font-size: 30px; line-height: 1.02; margin-bottom: 6px; }
+    .product-tile p { color: rgba(255,255,255,.82); font-size: 15px; font-weight: 800; }
+
+    .visualizer { background: var(--cream); overflow: hidden; }
+    .visualizer-grid { display: grid; grid-template-columns: .95fr 1.05fr; gap: 52px; align-items: center; }
+    .visualizer-image { min-height: 500px; border-radius: 34px; background: linear-gradient(180deg, rgba(15,35,57,.05), rgba(15,35,57,.2)), url("https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1200&q=82") center/cover; box-shadow: var(--shadow); position: relative; overflow: hidden; }
+    .visualizer-badge { position: absolute; left: 26px; bottom: 26px; background: rgba(255,255,255,.92); border-radius: 20px; padding: 18px; max-width: 280px; box-shadow: 0 12px 32px rgba(15,35,57,.14); }
+    .visualizer-badge strong { display: block; color: var(--navy); font-family: var(--serif); font-size: 28px; line-height: 1.05; margin-bottom: 6px; }
+    .visualizer-badge span { color: var(--muted); font-size: 14px; font-weight: 700; }
+    .visualizer-copy h2 { font-family: var(--serif); color: var(--navy); font-size: clamp(38px, 5vw, 64px); line-height: .98; letter-spacing: -.055em; margin-bottom: 20px; }
+    .visualizer-copy p { color: var(--muted); font-size: 18px; max-width: 560px; margin-bottom: 26px; }
+
+    .why { background: var(--navy-dark); color: var(--white); position: relative; overflow: hidden; }
+    .why::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 10% 10%, rgba(201,154,67,.18), transparent 30%), radial-gradient(circle at 90% 80%, rgba(255,255,255,.08), transparent 34%); pointer-events: none; }
+    .why .container { position: relative; z-index: 2; }
+    .why .section-head h2 { color: var(--white); }
+    .why .section-head p { color: rgba(255,255,255,.72); }
+    .why-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+    .why-item { border-top: 1px solid rgba(255,255,255,.18); padding-top: 24px; }
+    .why-num { font-family: var(--serif); color: var(--gold-light); font-size: 58px; line-height: 1; margin-bottom: 14px; }
+    .why-item h3 { font-family: var(--serif); font-size: 28px; line-height: 1.05; margin-bottom: 12px; }
+    .why-item p { color: rgba(255,255,255,.7); font-size: 16px; }
+
+    .process { background: var(--cream-light); }
+    .process-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .step { background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); padding: 28px; box-shadow: var(--shadow-soft); }
+    .step-number { width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; background: var(--gold); color: var(--white); font-weight: 900; margin-bottom: 15px; }
+    .step h3 { font-family: var(--serif); color: var(--navy); font-size: 25px; line-height: 1.1; margin-bottom: 8px; }
+    .step p { color: var(--muted); }
+
+    .specials { background: linear-gradient(180deg, var(--cream), #fff); }
+    .sale-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .sale-card { background: var(--white); border: 1px solid var(--line); border-radius: 22px; padding: 24px; box-shadow: var(--shadow-soft); display: grid; gap: 8px; }
+    .sale-badge { justify-self: start; background: var(--navy); color: var(--white); border-radius: 999px; padding: 6px 11px; font-size: 11px; text-transform: uppercase; font-weight: 900; letter-spacing: .08em; }
+    .sale-badge.gold { background: var(--gold); }
+    .sale-card h3 { font-family: var(--serif); color: var(--navy); font-size: 24px; line-height: 1.12; }
+    .price { color: var(--gold); font-size: 28px; font-weight: 900; }
+    .was { color: var(--muted); font-size: 14px; text-decoration: line-through; margin-left: 8px; font-weight: 600; }
+    .sale-card p { color: var(--muted); font-size: 15px; }
+
+    .reviews { background: var(--white); }
+    .review-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .review-card { background: var(--cream); border: 1px solid var(--line); border-radius: 24px; padding: 28px; }
+    .rating { display: flex; align-items: center; gap: 12px; color: var(--gold); font-size: 22px; margin-bottom: 14px; }
+    .review-card p { color: var(--ink); font-size: 16px; font-style: italic; margin-bottom: 18px; }
+    .review-card strong { color: var(--navy); }
+
+    .service-area { background: var(--white); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .area-grid { display: grid; grid-template-columns: .92fr 1.08fr; gap: 30px; align-items: center; }
+    .area-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .area-list div { background: var(--cream-light); border: 1px solid var(--line); border-radius: 16px; padding: 15px; font-weight: 900; color: var(--navy); }
+
+    .showroom { background: linear-gradient(90deg, rgba(15,35,57,.94), rgba(15,35,57,.8)), url("https://images.unsplash.com/photo-1600121848594-d8644e57abab?auto=format&fit=crop&w=1600&q=82") center/cover; color: var(--white); text-align: center; }
+    .showroom h2 { font-family: var(--serif); font-size: clamp(40px, 5vw, 68px); line-height: .98; letter-spacing: -.055em; margin-bottom: 16px; }
+    .showroom p { color: rgba(255,255,255,.82); font-size: 19px; max-width: 760px; margin: 0 auto 28px; }
+    .contact-points { display: flex; justify-content: center; gap: 18px; flex-wrap: wrap; margin-top: 24px; color: rgba(255,255,255,.82); font-weight: 800; }
+    .map { height: 360px; overflow: hidden; }
+    .map iframe { width: 100%; height: 100%; border: 0; display: block; }
+
+    footer { background: var(--navy-dark); color: rgba(255,255,255,.72); padding: 58px 0 24px; }
+    .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 34px; margin-bottom: 36px; }
+    .footer-logo { font-family: var(--serif); color: var(--white); font-size: 28px; font-weight: 800; line-height: 1.05; margin-bottom: 12px; }
+    .footer-logo span { color: var(--gold-light); }
+    .footer-tag { color: rgba(255,255,255,.58); max-width: 320px; margin-bottom: 16px; font-style: italic; }
+    .footer-heading { color: var(--white); font-size: 12px; text-transform: uppercase; letter-spacing: .15em; font-weight: 900; margin-bottom: 14px; }
+    .footer-links { display: grid; gap: 8px; font-size: 14px; }
+    .footer-links a, .footer-links span { color: rgba(255,255,255,.65); }
+    .footer-links a:hover { color: var(--gold-light); }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,.12); padding-top: 20px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; font-size: 13px; color: rgba(255,255,255,.48); }
+
+    .mobile-sticky { display: none; position: fixed; left: 10px; right: 10px; bottom: 10px; z-index: 200; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .mobile-sticky a { padding: 15px 10px; border-radius: 16px; color: var(--white); font-weight: 900; text-align: center; box-shadow: 0 14px 30px rgba(15,35,57,.3); }
+    .mobile-sticky a:first-child { background: var(--green); }
+    .mobile-sticky a:last-child { background: var(--navy); }
+
+    @media (max-width: 1060px) {
+      .nav-links, .phone-link { display: none; }
+      .menu-toggle { display: inline-flex; }
+      .hero .container, .visualizer-grid, .finance-inner, .area-grid { grid-template-columns: 1fr; }
+      .quote-card { max-width: 580px; }
+      .quick-grid { grid-template-columns: repeat(2, 1fr); }
+      .product-gallery { grid-template-columns: 1fr 1fr; }
+      .why-grid, .sale-grid, .review-grid, .process-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 720px) {
+      .top-strip { display: none; }
+      .container { width: min(100% - 28px, 1200px); }
+      .nav { min-height: 72px; }
+      .logo-main { font-size: 23px; }
+      .logo-sub { display: none; }
+      .header-actions .btn-primary { display: none; }
+      .hero { min-height: auto; }
+      .hero .container { min-height: auto; padding: 60px 0 84px; }
+      .hero-proof, .quick-grid, .area-list { grid-template-columns: 1fr; }
+      .hero-actions .btn { width: 100%; }
+      section { padding: 62px 0; }
+      .section-head { display: block; }
+      .section-head p { margin-top: 12px; }
+      .product-gallery { grid-template-columns: 1fr; grid-auto-rows: 250px; }
+      .product-tile.large { grid-row: auto; }
+      .visualizer-image { min-height: 360px; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .mobile-sticky { display: grid; }
+      body { padding-bottom: 78px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="top-strip">
+    <div class="container">
+      <div>Free flooring estimates · Financing available · Professional installation</div>
+      <div><a href="tel:5732210107">573-221-0107</a> · 3404 Market Street, Hannibal, MO</div>
+    </div>
+  </div>
+
+  <header>
+    <div class="container nav">
+      <a href="#top" class="logo" aria-label="Allen's Carpet and Flooring home">
+        <span class="logo-main">Allen's <span>Carpet</span></span>
+        <span class="logo-sub">& Flooring · Hannibal, MO</span>
+      </a>
+
+      <ul class="nav-links" aria-label="Primary navigation">
+        <li><a href="#products">Products</a></li>
+        <li><a href="#specials">Specials</a></li>
+        <li><a href="#process">Process</a></li>
+        <li><a href="#why">Why Allen's</a></li>
+        <li><a href="#reviews">Reviews</a></li>
+        <li><a href="#showroom">Contact</a></li>
+      </ul>
+
+      <div class="header-actions">
+        <a class="phone-link" href="tel:5732210107">573-221-0107</a>
+        <a class="btn btn-primary" href="#quote">Free Estimate</a>
+        <button class="menu-toggle" id="menuToggle" aria-label="Open navigation" aria-expanded="false"><span></span></button>
+      </div>
+    </div>
+
+    <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile navigation">
+      <a href="#products">Products</a>
+      <a href="#specials">Specials</a>
+      <a href="#process">Process</a>
+      <a href="#why">Why Allen's</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#showroom">Contact</a>
+      <a href="tel:5732210107">Call 573-221-0107</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero" id="quote">
+      <div class="container">
+        <div>
+          <span class="eyebrow">Hannibal's trusted flooring showroom</span>
+          <h1>Beautiful floors made simple. <em>Installed to last.</em></h1>
+          <p>Carpet, luxury vinyl plank, hardwood, laminate, tile, area rugs, and expert installation from Allen's Carpet & Flooring in Hannibal, Missouri.</p>
+
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#quoteForm">Request a Free Estimate</a>
+            <a class="btn btn-outline" href="tel:5732210107">Call 573-221-0107</a>
+          </div>
+
+          <div class="hero-proof">
+            <div class="proof"><strong>Free</strong><span>In-home estimates</span></div>
+            <div class="proof"><strong>Local</strong><span>Hannibal showroom</span></div>
+            <div class="proof"><strong>Expert</strong><span>Professional installation</span></div>
+          </div>
+        </div>
+
+        <aside class="quote-card" id="quoteForm">
+          <h2>Start your flooring project.</h2>
+          <p>Send a quick request or call the showroom. For fastest service, call directly.</p>
+          <form action="mailto:info@allenscarpetinc.com" method="post" enctype="text/plain">
+            <input type="text" name="Name" placeholder="Name" required />
+            <input type="tel" name="Phone" placeholder="Phone" required />
+            <select name="Flooring Type" required>
+              <option value="">What type of flooring?</option>
+              <option>Carpet</option>
+              <option>Luxury Vinyl Plank</option>
+              <option>Hardwood</option>
+              <option>Laminate</option>
+              <option>Tile</option>
+              <option>Area Rugs</option>
+              <option>Not sure yet</option>
+            </select>
+            <textarea name="Project Details" placeholder="Tell us about your room, timeline, or square footage"></textarea>
+            <button class="btn btn-blue" type="submit">Send Estimate Request</button>
+          </form>
+          <div class="form-note">Prefer to talk? <a href="tel:5732210107"><strong>Call 573-221-0107</strong></a>.</div>
+        </aside>
+      </div>
+    </section>
+
+    <div class="quick-actions">
+      <div class="container quick-grid">
+        <a class="quick-card" href="tel:5732210107"><span>☎</span> Call Now</a>
+        <a class="quick-card" href="#quote"><span>✓</span> Free Estimate</a>
+        <a class="quick-card" href="#products"><span>⌂</span> Shop Flooring</a>
+        <a class="quick-card" href="https://maps.google.com/?q=3404+Market+Street+Hannibal+MO+63401" target="_blank" rel="noopener"><span>→</span> Visit Showroom</a>
+      </div>
+    </div>
+
+    <section class="finance-band" aria-label="Financing available">
+      <div class="container finance-inner">
+        <div>
+          <h2>Special financing available.</h2>
+          <p>Flexible payment options can help bring your flooring vision to life. Ask Allen's about current financing options.</p>
+        </div>
+        <a class="btn btn-primary" href="#quote">Get Started</a>
+      </div>
+    </section>
+
+    <section class="products" id="products">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">Distinctive products</span>
+            <h2>Flooring solutions for every room.</h2>
+          </div>
+          <p>Shop carpet, luxury vinyl plank, hardwood, laminate, tile, and area rugs with practical guidance from a local showroom team.</p>
+        </div>
+
+        <div class="product-gallery">
+          <a class="product-tile large" href="#quote" style="--photo:url('https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1100&q=82')">
+            <div><h3>Carpet</h3><p>Soft, warm, family-friendly comfort.</p></div>
+          </a>
+          <a class="product-tile" href="#quote" style="--photo:url('https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=900&q=82')">
+            <div><h3>Luxury Vinyl</h3><p>Durable style for busy homes.</p></div>
+          </a>
+          <a class="product-tile" href="#quote" style="--photo:url('https://images.unsplash.com/photo-1600573472550-8090b5e0745e?auto=format&fit=crop&w=900&q=82')">
+            <div><h3>Hardwood</h3><p>Timeless beauty and lasting value.</p></div>
+          </a>
+          <a class="product-tile" href="#quote" style="--photo:url('https://images.unsplash.com/photo-1600210492493-0946911123ea?auto=format&fit=crop&w=900&q=82')">
+            <div><h3>Tile</h3><p>Kitchens, baths, entries, and more.</p></div>
+          </a>
+          <a class="product-tile" href="#quote" style="--photo:url('https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=900&q=82')">
+            <div><h3>Area Rugs</h3><p>Finish the room with warmth and texture.</p></div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="visualizer" id="visualizer">
+      <div class="container visualizer-grid">
+        <div class="visualizer-image">
+          <div class="visualizer-badge">
+            <strong>Envision the room first.</strong>
+            <span>Get help choosing flooring that fits your home, lifestyle, and budget.</span>
+          </div>
+        </div>
+
+        <div class="visualizer-copy">
+          <span class="eyebrow">Room inspiration</span>
+          <h2>See the possibilities before you choose.</h2>
+          <p>Bring in photos, measurements, colors, and ideas. Our showroom team can help you compare samples and narrow down the right look for your home.</p>
+          <a class="btn btn-blue" href="#showroom">Visit Our Showroom</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="process" id="process">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">Simple process</span>
+            <h2>From first call to finished floor.</h2>
+          </div>
+          <p>A clear next step helps customers move forward without confusion or pressure.</p>
+        </div>
+
+        <div class="process-grid">
+          <div class="step"><div class="step-number">1</div><h3>Call or request an estimate</h3><p>Tell us what room you are working on and what type of flooring you are considering.</p></div>
+          <div class="step"><div class="step-number">2</div><h3>Choose your flooring</h3><p>Visit the showroom, compare samples, and get help finding the right product for your home.</p></div>
+          <div class="step"><div class="step-number">3</div><h3>Get it installed</h3><p>Our installation team completes the project so your home looks finished and ready to enjoy.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="why" id="why">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">Why choose Allen's?</span>
+            <h2>Quality, expertise, and local service.</h2>
+          </div>
+          <p>If you stand on it, we stand behind it. Allen's has built its reputation one floor, one home, and one customer at a time.</p>
+        </div>
+
+        <div class="why-grid">
+          <article class="why-item">
+            <div class="why-num">01</div>
+            <h3>Superior Quality</h3>
+            <p>Trusted flooring brands and practical products selected for beauty, durability, and everyday performance.</p>
+          </article>
+          <article class="why-item">
+            <div class="why-num">02</div>
+            <h3>Trusted Expertise</h3>
+            <p>Helpful guidance comparing flooring options, understanding what works in each room, and planning the installation.</p>
+          </article>
+          <article class="why-item">
+            <div class="why-num">03</div>
+            <h3>Locally Owned</h3>
+            <p>A local Hannibal business serving homeowners throughout Northeast Missouri and the surrounding area.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="specials" id="specials">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">On sale now</span>
+            <h2>Current flooring specials.</h2>
+          </div>
+          <p>Inventory specials change daily. Call or stop by for closeout deals, small rolls, carpet specials, and luxury vinyl plank savings.</p>
+        </div>
+
+        <div class="sale-grid">
+          <article class="sale-card">
+            <span class="sale-badge">50% Off Carpet</span>
+            <h3>Mohawk Frieze - 65 oz. Cloud-Walk</h3>
+            <div class="price">$2.29 s/f</div>
+            <p>Premium frieze carpet with soft comfort and durable everyday performance.</p>
+          </article>
+
+          <article class="sale-card">
+            <span class="sale-badge gold">60% Off LVP</span>
+            <h3>Mohawk Commercial LVP - 22mil 6mm</h3>
+            <div class="price">$1.89 s/f <span class="was">$3.98</span></div>
+            <p>Commercial-grade luxury vinyl for high-traffic rooms and busy households.</p>
+          </article>
+
+          <article class="sale-card">
+            <span class="sale-badge">Everyday Special</span>
+            <h3>Free 8 lb. Carpet Pad</h3>
+            <div class="price">Free</div>
+            <p>Free 8 lb. carpet pad with select Mohawk SmartStrand carpet purchases. Ask for details.</p>
+          </article>
+        </div>
+
+        <div style="text-align:center;margin-top:34px;">
+          <a class="btn btn-outline-dark" href="tel:5732210107">Call for Current Specials</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="reviews" id="reviews">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">Real Google reviews</span>
+            <h2>Trusted by Hannibal and beyond.</h2>
+          </div>
+          <p>Customers consistently mention helpful service, fair pricing, quality products, and professional installation.</p>
+        </div>
+
+        <div class="review-grid">
+          <article class="review-card">
+            <div class="rating">★★★★★ <strong style="color:var(--navy);font-size:16px;">Google Review</strong></div>
+            <p>"The flooring is great as is the customer service and pricing. Great people and great customer service. I highly recommend!"</p>
+            <strong>- Robin K</strong>
+          </article>
+          <article class="review-card">
+            <div class="rating">★★★★★ <strong style="color:var(--navy);font-size:16px;">Google Review</strong></div>
+            <p>"Very good people. They gave me a heck of a deal come see these guys. Very good customer service highly recommend."</p>
+            <strong>- Daniel D. Myers Jr.</strong>
+          </article>
+          <article class="review-card">
+            <div class="rating">★★★★★ <strong style="color:var(--navy);font-size:16px;">Google Review</strong></div>
+            <p>"Allen’s Carpet did a great job. Easy to work with and nice people. Products they installed are excellent."</p>
+            <strong>- Linda Palmer</strong>
+          </article>
+        </div>
+
+        <div style="text-align:center;margin-top:34px;">
+          <a class="btn btn-outline-dark" href="https://g.page/r/CVj0Cnybq_9vEAE/review" target="_blank" rel="noopener">Leave a Google Review</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="areas" class="service-area">
+      <div class="container area-grid">
+        <div class="section-head" style="display:block;margin-bottom:0;">
+          <span class="eyebrow">Service areas</span>
+          <h2>Serving Hannibal and Northeast Missouri.</h2>
+          <p style="margin-top:14px;">Visit the showroom in Hannibal or call to discuss flooring projects in the surrounding area.</p>
+        </div>
+
+        <div class="area-list">
+          <div>Hannibal, MO</div>
+          <div>Palmyra, MO</div>
+          <div>New London, MO</div>
+          <div>Monroe City, MO</div>
+          <div>Quincy, IL Area</div>
+          <div>Northeast Missouri</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="showroom" id="showroom">
+      <div class="container">
+        <span class="eyebrow">Shop flooring in Hannibal, MO</span>
+        <h2>Let one of our flooring experts help.</h2>
+        <p>Visit Allen's Carpet & Flooring at 3404 Market Street in Hannibal, Missouri, or call today for a free estimate on carpet, luxury vinyl, hardwood, tile, laminate, or area rugs.</p>
+
+        <div class="hero-actions" style="justify-content:center;">
+          <a class="btn btn-primary" href="#quote">Request a Free Estimate</a>
+          <a class="btn btn-outline" href="tel:5732210107">Call 573-221-0107</a>
+        </div>
+
+        <div class="contact-points">
+          <span>3404 Market Street, Hannibal, MO 63401</span>
+          <span>•</span>
+          <span>Monday - Friday: 8:00 am - 4:30 pm</span>
+          <span>•</span>
+          <span>Weekend or evening appointments available by call</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="map" aria-label="Allen's Carpet & Flooring location map">
+      <iframe
+        src="https://www.google.com/maps?q=3404%20Market%20Street%20Hannibal%20MO%2063401&output=embed"
+        title="Allen's Carpet & Flooring map"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-logo">Allen's <span>Carpet</span><br>& Flooring</div>
+          <p class="footer-tag">"If you stand on it, we stand behind it."</p>
+          <div class="footer-links">
+            <a href="tel:5732210107">573-221-0107</a>
+            <span>3404 Market Street, Hannibal, MO 63401</span>
+          </div>
+        </div>
+
+        <div>
+          <div class="footer-heading">Shop</div>
+          <div class="footer-links">
+            <a href="#products">Carpet</a>
+            <a href="#products">Luxury Vinyl Plank</a>
+            <a href="#products">Hardwood</a>
+            <a href="#products">Laminate</a>
+            <a href="#products">Tile</a>
+            <a href="#products">Area Rugs</a>
+          </div>
+        </div>
+
+        <div>
+          <div class="footer-heading">Get Started</div>
+          <div class="footer-links">
+            <a href="#quote">Request a Quote</a>
+            <a href="#specials">Current Specials</a>
+            <a href="#visualizer">Room Inspiration</a>
+            <a href="#reviews">Reviews</a>
+            <a href="https://www.facebook.com/allenscarpet" target="_blank" rel="noopener">Facebook</a>
+          </div>
+        </div>
+
+        <div>
+          <div class="footer-heading">Hours</div>
+          <div class="footer-links">
+            <span>Mon - Fri: 8:00 am - 4:30 pm</span>
+            <span>Saturday: By appointment</span>
+            <span>Sunday: By appointment</span>
+            <a href="tel:5732210107">Call for weekend or evening appointments</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>© <span id="year"></span> Allen's Carpet & Flooring Inc. All Rights Reserved.</span>
+        <span>Serving Hannibal, MO and Northeast Missouri</span>
+      </div>
+    </div>
+  </footer>
+
+  <div class="mobile-sticky">
+    <a href="tel:5732210107">Call Now</a>
+    <a href="#quote">Free Estimate</a>
+  </div>
+
+  <script>
+    const menuToggle = document.getElementById('menuToggle');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    if (menuToggle && mobileMenu) {
+      menuToggle.addEventListener('click', () => {
+        const isOpen = mobileMenu.classList.toggle('open');
+        menuToggle.setAttribute('aria-expanded', String(isOpen));
+      });
+
+      mobileMenu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          mobileMenu.classList.remove('open');
+          menuToggle.setAttribute('aria-expanded', 'false');
+        });
+      });
+    }
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
