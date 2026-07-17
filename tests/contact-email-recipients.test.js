@@ -2,28 +2,35 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
-const PRIMARY_RECIPIENT = "allenscarpet@hotmail.com";
-const CC_RECIPIENT = "allensfloorinc@gmail.com";
+const pages = ["index.html", "contact.html"];
+const [clientScript, ...pageHtml] = await Promise.all([
+  readFile(new URL("../assets/contact-form.js", import.meta.url), "utf8"),
+  ...pages.map((page) => readFile(new URL(`../${page}`, import.meta.url), "utf8")),
+]);
 
-for (const page of ["index.html", "contact.html"]) {
-  test(`${page} sends one notification to the primary recipient with one CC`, async () => {
-    const html = await readFile(new URL(`../${page}`, import.meta.url), "utf8");
-    const formActions = [
-      ...html.matchAll(/<form\b[^>]*\baction=["']([^"']+)["'][^>]*>/gi),
-    ].map((match) => match[1]);
+for (const [index, page] of pages.entries()) {
+  test(`${page} posts its contact form to the secure same-origin endpoint`, () => {
+    const html = pageHtml[index];
+    const forms = [
+      ...html.matchAll(/<form\b([^>]*)\baction=["']([^"']+)["']([^>]*)>/gi),
+    ];
 
-    assert.equal(formActions.length, 1);
-
-    const action = new URL(formActions[0]);
-    const recipients = [action.pathname, ...action.searchParams.getAll("cc")];
-
-    assert.equal(action.protocol, "mailto:");
-    assert.deepEqual(recipients, [PRIMARY_RECIPIENT, CC_RECIPIENT]);
-    assert.equal(new Set(recipients).size, recipients.length);
+    assert.equal(forms.length, 1);
+    assert.equal(forms[0][2], "/api/contact");
+    assert.match(`${forms[0][1]} ${forms[0][3]}`, /\bmethod=["']post["']/i);
+    assert.match(`${forms[0][1]} ${forms[0][3]}`, /\bdata-contact-form\b/i);
+    assert.doesNotMatch(html, /mailto:|allenscarpet@hotmail\.com|allensfloorinc@gmail\.com/i);
     assert.doesNotMatch(
       html,
-      /\bname=["'](?:to|cc|bcc|recipient)["']/i,
-      "Visitors must not be able to control email recipients through form fields",
+      /\bname=["'](?:to|cc|bcc|from|recipient)["']/i,
+      "Visitors must not be able to control email headers through form fields",
     );
+    assert.match(html, /<script\b[^>]*\bsrc=["']assets\/contact-form\.js["']/i);
   });
 }
+
+test("the contact form client submits only to each form's configured same-origin action", () => {
+  assert.match(clientScript, /fetch\(form\.action,/);
+  assert.doesNotMatch(clientScript, /https?:\/\//i);
+  assert.doesNotMatch(clientScript, /allenscarpet@hotmail\.com|allensfloorinc@gmail\.com/i);
+});

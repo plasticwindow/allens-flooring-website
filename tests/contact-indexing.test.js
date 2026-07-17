@@ -45,7 +45,7 @@ test("/contact returns 200 with static, indexable HTML", async () => {
   assert.equal(response.headers.get("www-authenticate"), null);
   assert.match(html, /<h1\b[^>]*>[^<]+<\/h1>/i);
   assert.match(html, /573-221-0107/);
-  assert.doesNotMatch(html, /<script\b/i);
+  assert.match(html, /<script\b[^>]*\bsrc=["']assets\/contact-form\.js["']/i);
   assert.doesNotMatch(
     html,
     /<meta\b(?=[^>]*\bname=["']robots["'])[^>]*\bcontent=["'][^"']*noindex/i,

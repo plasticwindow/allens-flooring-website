@@ -23,6 +23,12 @@ export async function onRequest(context) {
     return Response.redirect(CANONICAL_HOMEPAGE, 301);
   }
 
+  if (url.hostname === "www.allenscarpetinc.com") {
+    url.protocol = "https:";
+    url.hostname = "allenscarpetinc.com";
+    return Response.redirect(url.toString(), 301);
+  }
+
   if (url.protocol === "http:") {
     url.protocol = "https:";
     return Response.redirect(url.toString(), 301);

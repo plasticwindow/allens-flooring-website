@@ -62,6 +62,19 @@ test("an HTTP legacy URL redirects directly to the canonical homepage", async ()
   assert.equal(continued, false);
 });
 
+for (const url of [
+  "http://www.allenscarpetinc.com/",
+  "https://www.allenscarpetinc.com/",
+]) {
+  test(`${url} permanently redirects to the HTTPS canonical domain`, async () => {
+    const { continued, response } = await request(url);
+
+    assert.equal(response.status, 301);
+    assert.equal(response.headers.get("location"), CANONICAL_HOMEPAGE);
+    assert.equal(continued, false);
+  });
+}
+
 test("the clean HTTPS homepage continues to the static asset", async () => {
   const { continued, response } = await request(CANONICAL_HOMEPAGE);
 

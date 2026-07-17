@@ -394,9 +394,9 @@
         <aside class="quote-card" id="quoteForm">
           <h2>Start your flooring project.</h2>
           <p>Send a quick request or call the showroom. For fastest service, call directly.</p>
-          <form action="mailto:allenscarpet@hotmail.com?cc=allensfloorinc@gmail.com" method="post" enctype="text/plain">
-            <input type="text" name="Name" placeholder="Name" required />
-            <input type="tel" name="Phone" placeholder="Phone" required />
+          <form action="/api/contact" method="post" data-contact-form autocomplete="on">
+            <input type="text" name="Name" placeholder="Name" autocomplete="name" required />
+            <input type="tel" name="Phone" placeholder="Phone" autocomplete="tel" inputmode="tel" required />
             <select name="Flooring Type" required>
               <option value="">What type of flooring?</option>
               <option>Carpet</option>
@@ -406,7 +406,9 @@
               <option>Not sure yet</option>
             </select>
             <textarea name="Project Details" placeholder="Tell us about your room, timeline, or square footage"></textarea>
+            <input type="text" name="Website" tabindex="-1" autocomplete="off" aria-hidden="true" hidden />
             <button class="btn btn-blue" type="submit">Send Estimate Request</button>
+            <p class="form-note" data-form-status role="status" aria-live="polite" hidden></p>
           </form>
           <div class="form-note">Prefer to talk? <a href="tel:5732210107"><strong>Call 573-221-0107</strong></a>.</div>
         </aside>
@@ -696,5 +698,6 @@
 
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
+  <script src="assets/contact-form.js" defer></script>
 </body>
 </html>

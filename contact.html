@@ -151,12 +151,12 @@
 
       <section class="card" aria-labelledby="estimate-heading">
         <h2 id="estimate-heading">Request a free estimate</h2>
-        <form action="mailto:allenscarpet@hotmail.com?cc=allensfloorinc@gmail.com" method="post" enctype="text/plain">
+        <form action="/api/contact" method="post" data-contact-form autocomplete="on">
           <label>Name
             <input type="text" name="Name" autocomplete="name" required />
           </label>
           <label>Phone
-            <input type="tel" name="Phone" autocomplete="tel" required />
+            <input type="tel" name="Phone" autocomplete="tel" inputmode="tel" required />
           </label>
           <label>Flooring type
             <select name="Flooring Type" required>
@@ -171,8 +171,10 @@
           <label>Project details
             <textarea name="Project Details" placeholder="Tell us about your room, timeline, or square footage"></textarea>
           </label>
+          <input type="text" name="Website" tabindex="-1" autocomplete="off" aria-hidden="true" hidden />
           <button class="btn btn-primary" type="submit">Send Estimate Request</button>
-          <p class="form-note">Submitting opens your email application. For fastest service, call the showroom directly.</p>
+          <p class="form-note" data-form-status role="status" aria-live="polite" hidden></p>
+          <p class="form-note">For fastest service, call the showroom directly.</p>
         </form>
       </section>
     </div>
@@ -197,5 +199,6 @@
       </div>
     </div>
   </footer>
+  <script src="assets/contact-form.js" defer></script>
 </body>
 </html>
