@@ -33,7 +33,7 @@ for (const [index, page] of pages.entries()) {
 
 test("the contact form client submits only to each form's configured same-origin action", () => {
   assert.match(clientScript, /fetch\(form\.action,/);
-  assert.match(clientScript, /0x4AAAAAAFcaCnAgNHYqqrj6/);
+  assert.match(clientScript, /0x4AAAAAAFCaCnAgNHYqqrj6/);
   assert.doesNotMatch(clientScript, /TURNSTILE_SECRET_KEY|RESEND_API_KEY/);
   assert.match(clientScript, /turnstile\.render\(/);
   assert.match(clientScript, /turnstile\.reset\(/);

@@ -11,7 +11,7 @@ BCC. Recipient addresses are not embedded in the public HTML or frontend JavaScr
 Before deploying these changes, configure the following in Cloudflare:
 
 1. Under **Turnstile**, open the widget whose site key is
-   `0x4AAAAAAFcaCnAgNHYqqrj6`. Use Managed mode and allow `allenscarpetinc.com`.
+   `0x4AAAAAAFCaCnAgNHYqqrj6`. Use Managed mode and allow `allenscarpetinc.com`.
    Copy its private secret key into Cloudflare's encrypted secret field below.
    Add any separate preview
    hostname only if you plan to test a preview deployment.

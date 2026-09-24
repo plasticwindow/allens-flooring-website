@@ -1,5 +1,5 @@
 const forms = [...document.querySelectorAll("[data-contact-form]")];
-const TURNSTILE_SITE_KEY = "0x4AAAAAAFcaCnAgNHYqqrj6";
+const TURNSTILE_SITE_KEY = "0x4AAAAAAFCaCnAgNHYqqrj6";
 
 async function initializeTurnstile() {
   if (forms.length === 0) return;
