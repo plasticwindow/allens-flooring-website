@@ -130,6 +130,47 @@ test("a supplied visitor email becomes Reply-To, never From", async () => {
   assert.equal(email.from, ENV.CONTACT_FROM_EMAIL);
 });
 
+test("Siteverify diagnostics contain only approved fields and verify exactly once", async (t) => {
+  const logs = [];
+  t.mock.method(console, "info", (...args) => logs.push(args));
+  const { context, calls, turnstileCalls } = mockContext(contactRequest());
+  context.data.turnstileFetch = async (url, options) => {
+    turnstileCalls.push({ url, options });
+    return Response.json({ success: false, "error-codes": ["invalid-input-secret"],
+      hostname: "allenscarpetinc.com", action: "flooring_estimate",
+      secret: ENV.TURNSTILE_SECRET_KEY, token: "valid-test-token", customer: "Test Customer" });
+  };
+  assert.equal((await onRequestPost(context)).status, 403);
+  assert.equal(calls.length, 0);
+  assert.equal(turnstileCalls.length, 1);
+  assert.equal(turnstileCalls[0].options.body.get("response"), "valid-test-token");
+  assert.equal(turnstileCalls[0].options.body.get("secret"), ENV.TURNSTILE_SECRET_KEY);
+  assert.deepEqual(logs, [["Turnstile Siteverify diagnostic", {
+    success: false, "error-codes": ["invalid-input-secret"],
+    hostname: "allenscarpetinc.com", action: "flooring_estimate",
+    expectedHostname: "allenscarpetinc.com", expectedAction: "flooring_estimate",
+  }]]);
+});
+
+test("verification transport and JSON failures log no exception details", async (t) => {
+  const logs = [];
+  t.mock.method(console, "info", (...args) => logs.push(args));
+  for (const verify of [
+    async () => { throw new Error(ENV.TURNSTILE_SECRET_KEY); },
+    async () => new Response("not JSON"),
+  ]) {
+    const { context, calls } = mockContext(contactRequest());
+    context.data.turnstileFetch = verify;
+    assert.equal((await onRequestPost(context)).status, 403);
+    assert.equal(calls.length, 0);
+  }
+  assert.equal(logs.length, 2);
+  for (const [, fields] of logs) {
+    assert.deepEqual(fields, { success: null, "error-codes": [], hostname: null,
+      action: null, expectedHostname: "allenscarpetinc.com", expectedAction: "flooring_estimate" });
+  }
+});
+
 test("submitted text is normalized before it is added to the email", async () => {
   const { context, calls } = mockContext(
     contactRequest({

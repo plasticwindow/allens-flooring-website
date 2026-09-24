@@ -108,6 +108,8 @@ async function sha256(value) {
 }
 
 async function verifyTurnstile(context, token, hostname, remoteIp) {
+  const expectedAction = "flooring_estimate";
+  let result = null;
   const verifyFetch = context.data?.turnstileFetch || fetch;
   const body = new URLSearchParams({
     secret: context.env.TURNSTILE_SECRET_KEY,
@@ -121,14 +123,23 @@ async function verifyTurnstile(context, token, hostname, remoteIp) {
       body,
       signal: AbortSignal.timeout(10000),
     });
-    if (!response.ok) return false;
-
-    const result = await response.json();
-    return result.success === true &&
+    result = await response.json();
+    return response.ok && result?.success === true &&
       result.hostname === hostname &&
-      result.action === "flooring_estimate";
+      result.action === expectedAction;
   } catch {
     return false;
+  } finally {
+    // Temporary diagnostics: never log requests, credentials, tokens, or raw responses.
+    console.info("Turnstile Siteverify diagnostic", {
+      success: typeof result?.success === "boolean" ? result.success : null,
+      "error-codes": Array.isArray(result?.["error-codes"])
+        ? result["error-codes"].filter(code => typeof code === "string") : [],
+      hostname: typeof result?.hostname === "string" ? result.hostname : null,
+      action: typeof result?.action === "string" ? result.action : null,
+      expectedHostname: hostname,
+      expectedAction,
+    });
   }
 }
 
