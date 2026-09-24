@@ -153,10 +153,10 @@
         <h2 id="estimate-heading">Request a free estimate</h2>
         <form action="/api/contact" method="post" data-contact-form autocomplete="on">
           <label>Name
-            <input type="text" name="Name" autocomplete="name" required />
+            <input type="text" name="Name" autocomplete="name" maxlength="100" required />
           </label>
           <label>Phone
-            <input type="tel" name="Phone" autocomplete="tel" inputmode="tel" required />
+            <input type="tel" name="Phone" autocomplete="tel" inputmode="tel" maxlength="30" required />
           </label>
           <label>Flooring type
             <select name="Flooring Type" required>
@@ -169,9 +169,10 @@
             </select>
           </label>
           <label>Project details
-            <textarea name="Project Details" placeholder="Tell us about your room, timeline, or square footage"></textarea>
+            <textarea name="Project Details" maxlength="3000" placeholder="Tell us about your room, timeline, or square footage"></textarea>
           </label>
           <input type="text" name="Website" tabindex="-1" autocomplete="off" aria-hidden="true" hidden />
+          <div data-turnstile-widget></div>
           <button class="btn btn-primary" type="submit">Send Estimate Request</button>
           <p class="form-note" data-form-status role="status" aria-live="polite" hidden></p>
           <p class="form-note">For fastest service, call the showroom directly.</p>

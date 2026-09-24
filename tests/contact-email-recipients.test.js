@@ -26,11 +26,17 @@ for (const [index, page] of pages.entries()) {
       "Visitors must not be able to control email headers through form fields",
     );
     assert.match(html, /<script\b[^>]*\bsrc=["']assets\/contact-form\.js["']/i);
+    assert.match(html, /<div\b[^>]*\bdata-turnstile-widget\b/i);
+    assert.match(html, /\bname=["']Website["']/i);
   });
 }
 
 test("the contact form client submits only to each form's configured same-origin action", () => {
   assert.match(clientScript, /fetch\(form\.action,/);
-  assert.doesNotMatch(clientScript, /https?:\/\//i);
+  assert.match(clientScript, /0x4AAAAAAFcaCnAgNHYqqrj6/);
+  assert.doesNotMatch(clientScript, /TURNSTILE_SECRET_KEY|RESEND_API_KEY/);
+  assert.match(clientScript, /turnstile\.render\(/);
+  assert.match(clientScript, /turnstile\.reset\(/);
+  assert.doesNotMatch(clientScript, /fetch\(["']https?:\/\//i);
   assert.doesNotMatch(clientScript, /allenscarpet@hotmail\.com|allensfloorinc@gmail\.com/i);
 });
