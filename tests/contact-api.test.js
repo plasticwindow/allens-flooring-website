@@ -15,8 +15,10 @@ const ENV = {
 function mockDatabase() {
   const rateLimits = new Map();
   const fingerprints = new Map();
+  const submissions = [];
 
   return {
+    submissions,
     prepare(sql) {
       return {
         bind(...values) {
@@ -35,6 +37,10 @@ function mockDatabase() {
               throw new Error("Unexpected database query");
             },
             async run() {
+              if (sql.includes("INSERT INTO contact_submissions")) {
+                const [id, email, marketing_consent, consent_at, submitted_at, form_source] = values;
+                submissions.push({ id, email, marketing_consent, consent_at, submitted_at, form_source });
+              }
               if (sql.includes("DELETE FROM contact_submission_fingerprints")) {
                 fingerprints.delete(values[0]);
               }
@@ -53,6 +59,7 @@ function contactRequest(overrides = {}, headers = {}) {
     Phone: "573-555-0100",
     "Flooring Type": "Carpet",
     "Project Details": "Two bedrooms",
+    "Form Source": "/",
     Website: "",
     "cf-turnstile-response": "valid-test-token",
     ...overrides,
@@ -128,6 +135,132 @@ test("a supplied visitor email becomes Reply-To, never From", async () => {
   assert.equal(response.status, 200);
   assert.equal(email.reply_to, "customer@example.com");
   assert.equal(email.from, ENV.CONTACT_FROM_EMAIL);
+  assert.match(email.text, /^Email: customer@example.com$/m);
+});
+
+test("missing, empty, and whitespace-only optional email and unchecked consent still submit", async () => {
+  for (const fields of [{}, { Email: "" }, { Email: "   " }]) {
+    const db = mockDatabase();
+    const { context, calls } = mockContext(contactRequest(fields), undefined, db);
+    assert.equal((await onRequestPost(context)).status, 200);
+    assert.equal(db.submissions.length, 1);
+    assert.equal(db.submissions[0].email, null);
+    assert.equal(db.submissions[0].marketing_consent, 0);
+    assert.equal(db.submissions[0].consent_at, null);
+    const email = JSON.parse(calls[0].options.body);
+    assert.equal(email.reply_to, undefined);
+    assert.match(email.text, /^Marketing consent: No$/m);
+  }
+});
+
+test("only the checkbox's explicit yes value records consent, with or without email", async () => {
+  for (const email of ["", " Customer+Flooring@Example.com "]) {
+    for (const consent of ["yes", "", "false", "true", "0", "1", "on", "YES"]) {
+      const db = mockDatabase();
+      const before = Math.floor(Date.now() / 1000);
+      const { context, calls } = mockContext(contactRequest({
+        Email: email, "Marketing Consent": consent, "Form Source": "/contact",
+      }), undefined, db);
+      assert.equal((await onRequestPost(context)).status, 200);
+      const record = db.submissions[0];
+      assert.equal(record.email, email.trim().toLowerCase() || null);
+      assert.equal(record.marketing_consent, consent === "yes" ? 1 : 0);
+      assert.equal(record.consent_at, consent === "yes" ? record.submitted_at : null);
+      assert.ok(record.submitted_at >= before && record.submitted_at <= Date.now() / 1000);
+      assert.equal(record.form_source, "/contact");
+      const notification = JSON.parse(calls[0].options.body);
+      assert.match(notification.text, /Form source: \/contact/);
+      if (consent === "yes") {
+        assert.match(notification.text, /Marketing consent: Yes \(explicitly checked\)/);
+      } else {
+        assert.match(notification.text, /Marketing consent: No/);
+        assert.doesNotMatch(notification.text, /Consent recorded at:/);
+      }
+    }
+  }
+});
+
+test("invalid optional addresses are rejected without storing or sending", async () => {
+  for (const Email of ["invalid", "a@@example.com", "a b@example.com", "a@-example.com",
+    "a@example..com", "a\u0000@example.com", "a\r\n@example.com", ".a@example.com", "a..b@example.com", "a".repeat(255)]) {
+    const db = mockDatabase();
+    const { context, calls } = mockContext(contactRequest({ Email }), undefined, db);
+    assert.equal((await onRequestPost(context)).status, 400, Email);
+    assert.equal(calls.length, 0);
+    assert.equal(db.submissions.length, 0);
+  }
+});
+
+test("source metadata is bounded and legacy submissions are marked unknown", async () => {
+  const request = contactRequest();
+  const fields = await request.formData();
+  fields.delete("Form Source");
+  const db = mockDatabase();
+  const legacy = mockContext(new Request(ENDPOINT, { method: "POST", body: fields }), undefined, db);
+  assert.equal((await onRequestPost(legacy.context)).status, 200);
+  assert.equal(db.submissions[0].form_source, "unknown");
+  for (const source of ["https://example.com", "/contact?private=secret", "/other"]) {
+    const { context, calls } = mockContext(contactRequest({ "Form Source": source }));
+    assert.equal((await onRequestPost(context)).status, 400);
+    assert.equal(calls.length, 0);
+  }
+});
+
+test("changing consent or source cannot bypass duplicates or change stored consent", async () => {
+  const db = mockDatabase();
+  const first = mockContext(contactRequest({ Email: "customer@example.com" }), undefined, db);
+  assert.equal((await onRequestPost(first.context)).status, 200);
+  const duplicate = mockContext(contactRequest({ Email: "customer@example.com",
+    "Marketing Consent": "yes", "Form Source": "/contact" }), undefined, db);
+  assert.equal((await onRequestPost(duplicate.context)).status, 409);
+  assert.equal(duplicate.calls.length, 0);
+  assert.equal(db.submissions.length, 1);
+  assert.equal(db.submissions[0].marketing_consent, 0);
+});
+
+test("storage failure prevents delivery and releases the reservation for retry", async () => {
+  const db = mockDatabase();
+  const failingDb = { prepare(sql) {
+    if (sql.includes("INSERT INTO contact_submissions")) {
+      return { bind() { return { async run() { throw new Error("storage failed"); } }; } };
+    }
+    return db.prepare(sql);
+  } };
+  const failed = mockContext(contactRequest(), undefined, failingDb);
+  assert.equal((await onRequestPost(failed.context)).status, 503);
+  assert.equal(failed.calls.length, 0);
+  assert.equal(db.submissions.length, 0);
+  const retry = mockContext(contactRequest(), undefined, db);
+  assert.equal((await onRequestPost(retry.context)).status, 200);
+  assert.equal(db.submissions.length, 1);
+});
+
+test("honeypot, spam, and failed verification never store customer email or consent", async () => {
+  for (const fields of [{ Website: "bot" }, { "Project Details": "Buy bitcoin" },
+    { "cf-turnstile-response": "" }, { "cf-turnstile-response": "invalid" }]) {
+    const db = mockDatabase();
+    const { context, calls } = mockContext(contactRequest({
+      Email: "customer@example.com", "Marketing Consent": "yes", ...fields,
+    }), undefined, db);
+    context.data.turnstileFetch = async () => Response.json({ success: false });
+    await onRequestPost(context);
+    assert.equal(calls.length, 0);
+    assert.equal(db.submissions.length, 0);
+  }
+});
+
+test("email payload and idempotency key remain stable across a delayed retry", async (t) => {
+  const db = mockDatabase();
+  const fields = { Email: "customer@example.com", "Marketing Consent": "yes" };
+  const now = Date.now();
+  t.mock.method(Date, "now", () => now);
+  const failed = mockContext(contactRequest(fields), new Response("error", { status: 500 }), db);
+  assert.equal((await onRequestPost(failed.context)).status, 502);
+  t.mock.method(Date, "now", () => now + 30000);
+  const retry = mockContext(contactRequest(fields), undefined, db);
+  assert.equal((await onRequestPost(retry.context)).status, 200);
+  assert.equal(failed.calls[0].options.body, retry.calls[0].options.body);
+  assert.equal(failed.calls[0].options.headers["Idempotency-Key"], retry.calls[0].options.headers["Idempotency-Key"]);
 });
 
 test("Siteverify diagnostics contain only approved fields and verify exactly once", async (t) => {
@@ -325,6 +458,7 @@ test("repeated requests are rate limited before email delivery", async () => {
 
   assert.deepEqual(statuses, [200, 200, 200, 200, 200, 200, 200, 200, 429]);
   assert.equal(sent, 8);
+  assert.equal(database.submissions.length, 8);
 });
 
 test("failed email delivery releases the duplicate reservation for a retry", async () => {
@@ -369,10 +503,13 @@ test("oversized requests are rejected even without Content-Length", async () => 
 });
 
 test("duplicate, unexpected, and uploaded fields cannot send", async () => {
-  for (const kind of ["duplicate", "unexpected", "upload"]) {
+  for (const kind of ["duplicate", "duplicate-email", "duplicate-consent", "duplicate-source", "unexpected", "upload"]) {
     const original = contactRequest();
     const data = await original.formData();
     if (kind === "duplicate") data.append("Name", "Another name");
+    if (kind === "duplicate-email") { data.append("Email", "one@example.com"); data.append("Email", "two@example.com"); }
+    if (kind === "duplicate-consent") { data.append("Marketing Consent", "yes"); data.append("Marketing Consent", "false"); }
+    if (kind === "duplicate-source") data.append("Form Source", "/contact");
     if (kind === "unexpected") data.append("cC", "other@example.com");
     if (kind === "upload") data.set("Website", new Blob(["bot"]), "bot.txt");
     const { context, calls } = mockContext(new Request(ENDPOINT, { method: "POST", body: data }));
@@ -403,12 +540,33 @@ test("missing secrets fail closed individually", async () => {
   }
 });
 
+test("consent migration is additive and preserves existing protection and consent data on rerun", () => {
+  const sqlite = new DatabaseSync(":memory:");
+  try {
+    sqlite.exec(readFileSync(new URL("../migrations/0001_contact_protection.sql", import.meta.url), "utf8"));
+    sqlite.exec("INSERT INTO contact_rate_limits VALUES ('existing-key', 123456, 7)");
+    sqlite.exec("INSERT INTO contact_submission_fingerprints VALUES ('existing-fingerprint', 123456)");
+    const migration = readFileSync(new URL("../migrations/0002_contact_submissions.sql", import.meta.url), "utf8");
+    sqlite.exec(migration);
+    sqlite.exec("INSERT INTO contact_submissions VALUES ('existing-record', 'customer@example.com', 1, 123, 123, '/')");
+    sqlite.exec(migration);
+    assert.equal(sqlite.prepare("SELECT attempts FROM contact_rate_limits").get().attempts, 7);
+    assert.equal(sqlite.prepare("SELECT fingerprint FROM contact_submission_fingerprints").get().fingerprint, "existing-fingerprint");
+    assert.equal(sqlite.prepare("SELECT consent_at FROM contact_submissions").get().consent_at, 123);
+  } finally {
+    sqlite.close();
+  }
+});
+
 test("real SQLite migration supports handler writes, duplicates, failures, and rate limits", async () => {
   const sqlite = new DatabaseSync(":memory:");
   try {
     const migration = readFileSync(new URL("../migrations/0001_contact_protection.sql", import.meta.url), "utf8");
     sqlite.exec(migration);
     sqlite.exec(migration); // Safe to run again.
+    const consentMigration = readFileSync(new URL("../migrations/0002_contact_submissions.sql", import.meta.url), "utf8");
+    sqlite.exec(consentMigration);
+    sqlite.exec(consentMigration); // Safe to run again; existing protection tables remain intact.
     assert.equal(sqlite.prepare("SELECT count(*) AS n FROM sqlite_master WHERE type = 'index' AND name LIKE '%_expiry'").get().n, 2);
     const db = {
       prepare(sql) {
@@ -423,6 +581,12 @@ test("real SQLite migration supports handler writes, duplicates, failures, and r
     const count = (table) => sqlite.prepare(`SELECT count(*) AS n FROM ${table}`).get().n;
     const first = mockContext(contactRequest(), undefined, db);
     assert.equal((await onRequestPost(first.context)).status, 200);
+    assert.equal(count("contact_submissions"), 1);
+    const stored = sqlite.prepare("SELECT * FROM contact_submissions").get();
+    assert.equal(stored.email, null);
+    assert.equal(stored.marketing_consent, 0);
+    assert.equal(stored.consent_at, null);
+    assert.equal(stored.form_source, "/");
     assert.equal(count("contact_rate_limits"), 1);
     assert.equal(count("contact_submission_fingerprints"), 1);
     const rate = sqlite.prepare("SELECT * FROM contact_rate_limits").get();
@@ -435,8 +599,16 @@ test("real SQLite migration supports handler writes, duplicates, failures, and r
     assert.equal(duplicate.calls.length, 0);
     assert.equal(count("contact_submission_fingerprints"), 1);
 
-    const failure = mockContext(contactRequest({ "Project Details": "A different project" }), new Response("error", { status: 500 }), db);
+    const failure = mockContext(contactRequest({ "Project Details": "A different project", Email: "customer@example.com", "Marketing Consent": "yes", "Form Source": "/contact" }), new Response("error", { status: 500 }), db);
     assert.equal((await onRequestPost(failure.context)).status, 502);
+    const optedIn = sqlite.prepare("SELECT * FROM contact_submissions WHERE marketing_consent = 1").get();
+    assert.equal(optedIn.email, "customer@example.com");
+    assert.equal(optedIn.consent_at, optedIn.submitted_at);
+    assert.equal(optedIn.form_source, "/contact");
+    assert.equal(count("contact_submissions"), 2); // Valid consent survives provider failure.
+    assert.throws(() => sqlite.exec("UPDATE contact_submissions SET marketing_consent = 1, consent_at = NULL"), /CHECK constraint/);
+    assert.throws(() => sqlite.exec("UPDATE contact_submissions SET marketing_consent = 0, consent_at = 123"), /CHECK constraint/);
+    assert.throws(() => sqlite.exec("UPDATE contact_submissions SET marketing_consent = 2"), /CHECK constraint/);
     assert.equal(count("contact_submission_fingerprints"), 1);
 
     for (let n = 4; n <= 9; n++) {

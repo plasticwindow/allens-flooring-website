@@ -38,7 +38,10 @@ function cleanSingleLine(value, maximumLength) {
 }
 
 function isValidEmail(value) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+  const [local] = value.split("@");
+  return local.length <= 64 && !local.startsWith(".") && !local.endsWith(".") &&
+    !local.includes("..") &&
+    /^[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)+$/i.test(value);
 }
 
 function isValidPhone(value) {
@@ -62,7 +65,14 @@ function createMessage(formData) {
   const phone = cleanSingleLine(formData.get("Phone"), 30);
   const flooringType = cleanSingleLine(formData.get("Flooring Type"), 80);
   const projectDetails = cleanText(formData.get("Project Details"), 3000);
-  const email = cleanSingleLine(formData.get("Email"), 254).toLowerCase();
+  // Validate the supplied address without silently removing embedded controls.
+  const email = (formData.get("Email") || "").trim().toLowerCase();
+  const marketingConsent = formData.get("Marketing Consent") === "yes";
+  const formSource = formData.get("Form Source") ?? "unknown";
+
+  if (!["/", "/contact", "unknown"].includes(formSource)) {
+    return { error: "Invalid form source." };
+  }
 
   if (!name || !isValidPhone(phone) || !FLOORING_TYPES.has(flooringType)) {
     return { error: "Please complete all required fields with valid information." };
@@ -95,6 +105,8 @@ function createMessage(formData) {
   return {
     email,
     phone,
+    marketingConsent,
+    formSource,
     text: lines.join("\n"),
   };
 }
@@ -216,7 +228,7 @@ export async function onRequestPost(context) {
     return jsonResponse({ ok: false, error: "The form submission could not be read." }, 400);
   }
 
-  const allowedFields = new Set(["Name", "Phone", "Flooring Type", "Project Details", "Email", "Website", "cf-turnstile-response"]);
+  const allowedFields = new Set(["Name", "Phone", "Flooring Type", "Project Details", "Email", "Marketing Consent", "Form Source", "Website", "cf-turnstile-response"]);
   for (const [field, value] of formData) {
     if (!allowedFields.has(field) || typeof value !== "string" || formData.getAll(field).length !== 1) {
       return jsonResponse({ ok: false, error: "Invalid form fields." }, 400);
@@ -270,6 +282,7 @@ export async function onRequestPost(context) {
     return jsonResponse({ ok: false, error: "Verification failed. Please try again." }, 403);
   }
 
+  // Keep consent, timestamps, and page metadata out of duplicate detection.
   const fingerprint = await sha256(message.text.toLowerCase().replace(/\s+/g, " ").trim());
   try {
     if (!await reserveSubmission(env.CONTACT_DB, fingerprint, now)) {
@@ -280,12 +293,32 @@ export async function onRequestPost(context) {
     return jsonResponse({ ok: false, error: "The form is temporarily unavailable. Please call the showroom." }, 503);
   }
 
+  const consentAt = message.marketingConsent ? now : null;
+  try {
+    // Persist before delivery so a successful request always has a consent record.
+    // Only verified, non-duplicate, rate-allowed requests reach this write.
+    await env.CONTACT_DB.prepare(`
+      INSERT INTO contact_submissions
+        (id, email, marketing_consent, consent_at, submitted_at, form_source)
+      VALUES (?, ?, ?, ?, ?, ?)
+    `).bind(crypto.randomUUID(), message.email || null, message.marketingConsent ? 1 : 0,
+      consentAt, now, message.formSource).run();
+  } catch {
+    try {
+      await releaseSubmission(env.CONTACT_DB, fingerprint);
+    } catch {
+      console.error("Could not release unrecorded contact submission.");
+    }
+    console.error("Contact submission storage failed.");
+    return jsonResponse({ ok: false, error: "The form is temporarily unavailable. Please call the showroom." }, 503);
+  }
+
   const emailPayload = {
     from: env.CONTACT_FROM_EMAIL,
     to: [PRIMARY_RECIPIENT],
     cc: [CC_RECIPIENT],
     subject: EMAIL_SUBJECT,
-    text: message.text,
+    text: `${message.text}\n\nForm source: ${message.formSource}\nMarketing consent: ${message.marketingConsent ? "Yes (explicitly checked)" : "No"}`,
   };
 
   if (message.email) {

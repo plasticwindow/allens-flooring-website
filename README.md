@@ -18,7 +18,10 @@ Before deploying these changes, configure the following in Cloudflare:
 2. Under **Workers & Pages → D1**, create a database named
    `allens-contact-protection`. Open its **Console** and execute the SQL in
    [`migrations/0001_contact_protection.sql`](migrations/0001_contact_protection.sql).
-   This stores only hashed submission fingerprints and hashed visitor rate keys.
+   Then execute [`migrations/0002_contact_submissions.sql`](migrations/0002_contact_submissions.sql)
+   for optional customer email and consent records. On an existing configured
+   database, run only migration 0002 before deploying the updated handler.
+   Both migrations are additive, SQLite-compatible, and safe to rerun.
 3. Under **Workers & Pages → the Pages project → Settings → Bindings**, add a
    **D1 database** binding named exactly `CONTACT_DB`, pointing to the database
    from step 2. Configure production and preview separately if both are used.
@@ -60,8 +63,9 @@ missing, the form returns an error and asks the visitor to call the showroom.
 An eligible attempt has passed field/spam validation and supplied a nonempty
 token. Honeypot, malformed, missing-token, and obvious-spam requests are rejected
 before database writes. Invalid nonempty tokens increment the rate counter, but
-do not create a submission fingerprint. D1 is protection state, not a delivery
-or spam audit log: it stores no customer names, phone numbers, or messages.
+do not create a submission fingerprint or customer/consent record. D1 stores
+protection state and minimal customer/consent records, with no customer names,
+phone numbers, project messages, raw IP addresses, or Turnstile tokens.
 Fingerprints are reserved after verification and removed on email-provider failure.
 A successful API response means Resend accepted the request, not guaranteed inbox
 delivery; check Resend delivery events and the recipient inbox for that.
@@ -70,6 +74,55 @@ Cloudflare's rate and duplicate checks require the `CONTACT_DB` binding and
 the SQL schema above. Cloudflare Turnstile and Resend credentials are also
 required before these forms can send. No API key should be committed to this
 repository or to a Wrangler `vars` block.
+
+## Optional email and marketing consent
+
+Both forms accept a blank email and an unchecked marketing checkbox. Email
+addresses, when supplied, are trimmed, lowercased, validated server-side, stored
+in D1, included in the notification, and used as Reply-To. The primary recipient
+remains `allenscarpet@hotmail.com` and CC remains `allensfloorinc@gmail.com`.
+
+The checkbox starts unchecked, is never required, and displays this exact copy:
+
+> Yes, send me occasional flooring specials, promotions, and home-improvement updates from Allen’s Carpet & Flooring. I can unsubscribe anytime.
+
+`contact_submissions` stores one record for each verified, rate-allowed,
+non-duplicate submission attempt, before sending through Resend:
+
+- `id`: a generated UUID.
+- `email`: the normalized optional address, or NULL.
+- `marketing_consent`: 1 only when `Marketing Consent=yes` is explicitly sent
+  by the checkbox; otherwise 0. Supplying email alone never grants consent.
+- `consent_at`: server UTC Unix seconds when consent was recorded, or NULL
+  without consent. Database checks enforce that relationship.
+- `submitted_at`: server UTC Unix seconds for the submission.
+- `form_source`: `/` for the homepage estimate form or `/contact` for the contact
+  form; older requests without this field use `unknown`. This is client-declared
+  page metadata, not proof of origin. Full URLs and query strings are not stored.
+
+Consent may be checked even without email; the estimate still submits, but there
+is no email address to market to. Records capture consent at submission time;
+they are not a mailing-list subscription system or proof of address ownership.
+No marketing email is sent or subscription created by this change. Any future
+marketing use must require both a non-NULL email and explicit consent and honor
+subsequent unsubscribes; these historical records alone are not a current subscriber list.
+
+Storage failure prevents delivery and releases the duplicate reservation for a
+retry. If Resend fails after storage, the valid submission/consent record remains
+and the existing retry behavior is preserved; a retry can add a second record.
+These records are not a delivery log. Consent and source are excluded from the
+existing duplicate fingerprint and Resend idempotency key, so changing them does
+not bypass duplicate protection. Rejected duplicates do not update prior consent.
+The existing protection cleanup does not delete consent records.
+
+After applying migration 0002, inspect recent records with:
+
+```sql
+SELECT email, marketing_consent,
+       datetime(consent_at, 'unixepoch') AS consent_utc,
+       datetime(submitted_at, 'unixepoch') AS submitted_utc, form_source
+FROM contact_submissions ORDER BY submitted_at DESC LIMIT 10;
+```
 
 ## Verification after manual deployment
 

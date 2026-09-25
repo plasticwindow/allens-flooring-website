@@ -9,6 +9,31 @@ const [clientScript, ...pageHtml] = await Promise.all([
 ]);
 
 for (const [index, page] of pages.entries()) {
+  test(`${page} collects optional email and separate unchecked optional marketing consent`, () => {
+    const form = pageHtml[index].match(/<form\b[^>]*data-contact-form[^>]*>([\s\S]*?)<\/form>/i)[1];
+    const emails = [...form.matchAll(/<input\b[^>]*name="Email"[^>]*>/g)];
+    assert.equal(emails.length, 1);
+    assert.match(emails[0][0], /type="email"/);
+    assert.match(emails[0][0], /autocomplete="email"/);
+    assert.match(emails[0][0], /maxlength="254"/);
+    assert.doesNotMatch(emails[0][0], /\brequired\b/);
+    assert.match(form, /Email \(optional\)/);
+    const checkboxes = [...form.matchAll(/<input\b[^>]*name="Marketing Consent"[^>]*>/g)];
+    assert.equal(checkboxes.length, 1);
+    assert.match(checkboxes[0][0], /type="checkbox"/);
+    assert.match(checkboxes[0][0], /value="yes"/);
+    assert.doesNotMatch(checkboxes[0][0], /\b(?:checked|required)\b/);
+    const label = form.match(/<label class="marketing-consent">([\s\S]*?)<\/label>/)[1];
+    assert.ok(label.includes(checkboxes[0][0]));
+    assert.equal(label.match(/<span>(.*?)<\/span>/)[1].replaceAll("&amp;", "&"),
+      "Yes, send me occasional flooring specials, promotions, and home-improvement updates from Allen’s Carpet & Flooring. I can unsubscribe anytime.");
+    assert.ok(form.indexOf('name="Project Details"') < form.indexOf('name="Marketing Consent"'));
+    assert.ok(form.indexOf('name="Marketing Consent"') < form.indexOf('type="submit"'));
+    const source = form.match(/<input\b[^>]*name="Form Source"[^>]*>/)[0];
+    assert.match(source, /type="hidden"/);
+    assert.ok(source.includes(`value="${page === "index.html" ? "/" : "/contact"}"`));
+  });
+
   test(`${page} posts its contact form to the secure same-origin endpoint`, () => {
     const html = pageHtml[index];
     const forms = [
