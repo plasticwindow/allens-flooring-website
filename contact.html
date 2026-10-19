@@ -116,6 +116,7 @@
       .card { padding: 24px; }
     }
   </style>
+  <link rel="stylesheet" href="assets/scheduling.css" />
 </head>
 
 <body>
@@ -152,6 +153,7 @@
       <a href="/#why">Why Allen's</a>
       <a href="/#reviews">Reviews</a>
       <a href="/contact" aria-current="page">Contact</a>
+      <a href="/contact#schedule">Schedule a Free Estimate</a>
       <a href="tel:5732210107">Call 573-221-0107</a>
     </nav>
   </header>
@@ -190,7 +192,7 @@
 
       <section class="card" aria-labelledby="estimate-heading">
         <h2 id="estimate-heading">Request a free estimate</h2>
-        <form action="/api/contact" method="post" data-contact-form autocomplete="on">
+        <form id="estimateForm" action="/api/contact" method="post" data-contact-form autocomplete="on">
           <label>Name
             <input type="text" name="Name" autocomplete="name" maxlength="100" required />
           </label>
@@ -228,6 +230,15 @@
       </section>
     </div>
 
+    <section class="container scheduling-section" id="schedule" aria-labelledby="schedule-heading">
+      <div class="scheduling-intro">
+        <h2 id="schedule-heading">Free In-Home Flooring Estimate</h2>
+        <p>Choose a convenient time for your free in-home flooring estimate with Allen’s Carpet &amp; Flooring.</p>
+        <p>If the calendar doesn’t load, <a href="https://calendly.com/allenscarpetinc/30min" target="_blank" rel="noopener">open our scheduling page in a new tab</a> or <a href="tel:5732210107">call 573-221-0107</a>.</p>
+      </div>
+      <iframe class="scheduling-calendar" src="https://calendly.com/allenscarpetinc/30min?embed_domain=allenscarpetinc.com&amp;embed_type=Inline" title="Schedule a Free In-Home Flooring Estimate" loading="lazy"></iframe>
+    </section>
+
     <div class="map-options" id="mapDirections">
       <div class="container">
         <div>
@@ -261,6 +272,11 @@
       </div>
     </div>
   </footer>
+  <div class="scheduling-mobile" aria-label="Quick contact options">
+    <a href="tel:5732210107">Call Now</a>
+    <a href="#estimateForm">Free Estimate</a>
+    <a href="#schedule" aria-label="Schedule your free in-home estimate">Schedule</a>
+  </div>
   <script src="assets/navigation.js" defer></script>
   <script src="assets/contact-form.js" defer></script>
 </body>
