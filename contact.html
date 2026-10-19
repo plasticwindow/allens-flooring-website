@@ -52,6 +52,14 @@
     .btn { display: inline-flex; align-items: center; justify-content: center; padding: 14px 24px; border-radius: 999px; font-weight: 900; text-transform: uppercase; letter-spacing: .08em; font-size: 13px; }
     .btn-primary { background: var(--red); color: var(--white); box-shadow: 0 14px 30px rgba(139,30,45,.26); }
     .btn-primary:hover { background: var(--red-hover); }
+    .menu-toggle { display: none; width: 44px; height: 44px; border-radius: 12px; border: 1px solid var(--line); background: var(--white); color: var(--navy); align-items: center; justify-content: center; cursor: pointer; }
+    .menu-toggle span, .menu-toggle span::before, .menu-toggle span::after { display: block; width: 22px; height: 2px; background: currentColor; content: ""; position: relative; }
+    .menu-toggle span::before { position: absolute; top: -7px; }
+    .menu-toggle span::after { position: absolute; top: 7px; }
+    .mobile-menu { display: none; border-top: 1px solid var(--line); background: var(--white); padding: 10px 20px 22px; }
+    .mobile-menu a { display: block; padding: 12px 6px; border-bottom: 1px solid var(--line); color: var(--navy); font-weight: 900; text-transform: uppercase; font-size: 13px; letter-spacing: .08em; }
+
+    .header-actions { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
     .contact-hero { background: linear-gradient(105deg, rgba(15,35,57,.96), rgba(15,35,57,.78)), url("assets/flooring-showroom-hero.jpg") center 65%/cover; color: var(--white); padding: 86px 0 150px; }
     .eyebrow { display: block; margin-bottom: 12px; color: #e9bdc4; font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: .18em; }
     h1 { max-width: 780px; font-family: var(--serif); font-size: clamp(46px, 7vw, 76px); line-height: .98; letter-spacing: -.055em; }
@@ -72,6 +80,14 @@
     .marketing-consent { display: flex; align-items: flex-start; gap: 9px; color: var(--muted); font-size: .8125rem; line-height: 1.45; font-weight: 400; cursor: pointer; }
     .marketing-consent input { flex: 0 0 auto; width: 18px; height: 18px; margin: 1px 0 0; padding: 0; accent-color: var(--navy); }
     .form-note { color: var(--muted); font-size: 12px; }
+    .map-options { background: var(--cream-light); padding: 24px 0; scroll-margin-top: 100px; }
+    .map-options .container { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+    .map-options strong { color: var(--navy); font-size: 18px; }
+    .map-options p { color: var(--muted); margin-top: 4px; }
+    .map-links { display: flex; gap: 12px; flex-wrap: wrap; }
+    .map-link { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 12px 18px; border: 2px solid var(--navy); border-radius: 999px; color: var(--navy); font-weight: 800; text-align: center; }
+    .map-link:hover { background: var(--navy); color: var(--white); }
+    .map-link:focus-visible { outline: 3px solid var(--red); outline-offset: 4px; }
     .map { height: 360px; }
     .map iframe { width: 100%; height: 100%; border: 0; display: block; }
     footer { background: var(--navy-dark); color: rgba(255,255,255,.74); padding: 38px 0; }
@@ -82,12 +98,20 @@
 
     @media (max-width: 850px) {
       .nav-links { display: none; }
+      .menu-toggle { display: inline-flex; }
+      .mobile-menu.open { display: block; }
       .contact-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 720px) {
+      .header-actions .btn { display: none; }
     }
 
     @media (max-width: 560px) {
       .container { width: min(100% - 28px, 1160px); }
-      .nav .btn { display: none; }
+      .nav { gap: 12px; }
+      .logo-main { font-size: 22px; }
+      .logo-sub { font-size: 10px; letter-spacing: .08em; }
       .contact-hero { padding: 64px 0 132px; }
       .card { padding: 24px; }
     }
@@ -115,8 +139,21 @@
         <li><a href="/#reviews">Reviews</a></li>
         <li><a href="/contact" aria-current="page">Contact</a></li>
       </ul>
-      <a class="btn btn-primary" href="tel:5732210107">Call 573-221-0107</a>
+      <div class="header-actions">
+        <a class="btn btn-primary" href="tel:5732210107">Call 573-221-0107</a>
+        <button class="menu-toggle" id="menuToggle" type="button" aria-controls="mobileMenu" aria-label="Open navigation" aria-expanded="false"><span></span></button>
+      </div>
     </div>
+
+    <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile navigation">
+      <a href="/#products">Products</a>
+      <a href="/#specials">Specials</a>
+      <a href="/#process">Process</a>
+      <a href="/#why">Why Allen's</a>
+      <a href="/#reviews">Reviews</a>
+      <a href="/contact" aria-current="page">Contact</a>
+      <a href="tel:5732210107">Call 573-221-0107</a>
+    </nav>
   </header>
 
   <main>
@@ -170,6 +207,7 @@
               <option>Luxury Vinyl Plank</option>
               <option>Hardwood</option>
               <option>Laminate</option>
+              <option>Sheet Vinyl</option>
               <option>Not sure yet</option>
             </select>
           </label>
@@ -188,6 +226,19 @@
           <p class="form-note">For fastest service, call the showroom directly.</p>
         </form>
       </section>
+    </div>
+
+    <div class="map-options" id="mapDirections">
+      <div class="container">
+        <div>
+          <strong>Get directions to our showroom</strong>
+          <p>3404 Market Street, Hannibal, MO 63401</p>
+        </div>
+        <nav class="map-links" aria-label="Showroom directions">
+          <a class="map-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=3404%20Market%20Street%2C%20Hannibal%2C%20MO%2063401" target="_blank" rel="noopener">Open in Google Maps</a>
+          <a class="map-link" href="https://maps.apple.com/?daddr=3404%20Market%20Street%2C%20Hannibal%2C%20MO%2063401" target="_blank" rel="noopener">Open in Apple Maps</a>
+        </nav>
+      </div>
     </div>
 
     <div class="map" aria-label="Allen's Carpet & Flooring location map">
@@ -210,6 +261,7 @@
       </div>
     </div>
   </footer>
+  <script src="assets/navigation.js" defer></script>
   <script src="assets/contact-form.js" defer></script>
 </body>
 </html>

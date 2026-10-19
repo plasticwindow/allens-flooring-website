@@ -125,6 +125,22 @@ test("one valid submission sends to the fixed customer destination and preserved
   assert.equal(email.reply_to, undefined);
 });
 
+test("Sheet Vinyl requests send the selected flooring type from either form", async () => {
+  for (const source of ["/", "/contact"]) {
+    const { context, calls } = mockContext(contactRequest({
+      "Flooring Type": "Sheet Vinyl",
+      "Form Source": source,
+    }));
+    const response = await onRequestPost(context);
+
+    assert.equal(response.status, 200);
+    assert.deepEqual(await response.json(), { ok: true });
+    assert.equal(calls.length, 1);
+    const email = JSON.parse(calls[0].options.body);
+    assert.match(email.text, /^Flooring type: Sheet Vinyl$/m);
+  }
+});
+
 test("a supplied visitor email becomes Reply-To, never From", async () => {
   const { context, calls } = mockContext(
     contactRequest({ Email: "customer@example.com" }),
