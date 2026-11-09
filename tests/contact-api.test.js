@@ -137,7 +137,7 @@ test("Sheet Vinyl requests send the selected flooring type from either form", as
     assert.deepEqual(await response.json(), { ok: true });
     assert.equal(calls.length, 1);
     const email = JSON.parse(calls[0].options.body);
-    assert.match(email.text, /^Flooring type: Sheet Vinyl$/m);
+    assert.match(email.text, /^Flooring or service: Sheet Vinyl$/m);
   }
 });
 
@@ -444,6 +444,19 @@ test("ordinary flooring requests with one product link still send", async () => 
 
   assert.equal((await onRequestPost(context)).status, 200);
   assert.equal(calls.length, 1);
+});
+
+test("carpet cleaning is accepted as a supported service", async () => {
+  const { context, calls } = mockContext(contactRequest({
+    "Flooring Type": "Carpet Cleaning",
+    "Project Details": "Living room and hallway",
+  }));
+
+  const response = await onRequestPost(context);
+  assert.equal(response.status, 200);
+  assert.equal(calls.length, 1);
+  const email = JSON.parse(calls[0].options.body);
+  assert.match(email.text, /^Flooring or service: Carpet Cleaning$/m);
 });
 
 test("a repeated identical request is rejected without another email", async () => {

@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Allen's Carpet & Flooring | Carpet, LVP & Flooring Store in Hannibal, MO</title>
-  <meta name="description" content="Allen’s Carpet & Flooring offers carpet, LVP, laminate, hardwood, flooring installation, and free estimates in Hannibal, MO and the nearby Quincy, IL area." />
+  <meta name="description" content="Allen’s Carpet & Flooring offers carpet cleaning, carpet, LVP, laminate, hardwood, flooring installation, and free estimates in Hannibal, MO and the nearby Quincy, IL area." />
   <meta name="robots" content="index, follow, max-image-preview:large" />
   <meta name="theme-color" content="#17314f" />
   <link rel="canonical" href="https://allenscarpetinc.com/" />
@@ -38,7 +38,7 @@
     "url": "https://allenscarpetinc.com/",
     "image": "https://allenscarpetinc.com/assets/flooring-showroom-hero.jpg",
     "telephone": "+1-573-221-0107",
-    "description": "Flooring store and showroom in Hannibal, Missouri offering carpet, luxury vinyl plank, laminate, hardwood, flooring installation, and free estimates.",
+    "description": "Flooring store and showroom in Hannibal, Missouri offering carpet cleaning, carpet, luxury vinyl plank, laminate, hardwood, flooring installation, and free estimates.",
     "slogan": "If you stand on it, we stand behind it.",
     "foundingDate": "1958",
     "priceRange": "$$",
@@ -106,6 +106,10 @@
         {
           "@type": "OfferCatalog",
           "name": "Flooring Installation"
+        },
+        {
+          "@type": "OfferCatalog",
+          "name": "Carpet Cleaning"
         }
       ]
     },
@@ -249,6 +253,13 @@
     .sample-preview p { max-width: 740px; margin: 22px 0 28px; color: rgba(255,255,255,.78); font-size: 17px; }
     .sample-preview p strong { color: var(--white); }
 
+    .cleaning-feature { background: var(--cream-light); padding: 0 0 88px; }
+    .cleaning-card { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(320px, .85fr); overflow: hidden; border: 1px solid var(--line); border-radius: 30px; background: var(--white); box-shadow: var(--shadow); }
+    .cleaning-card img { width: 100%; height: 100%; min-height: 430px; object-fit: cover; }
+    .cleaning-copy { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; padding: clamp(34px, 5vw, 64px); }
+    .cleaning-copy h2 { color: var(--navy); font-family: var(--serif); font-size: clamp(38px, 4.5vw, 58px); line-height: 1; letter-spacing: -.05em; }
+    .cleaning-copy p { margin: 20px 0 26px; color: var(--muted); font-size: 17px; }
+
     .why { background: var(--navy-dark); color: var(--white); position: relative; overflow: hidden; }
     .why::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 10% 10%, rgba(139,30,45,.3), transparent 30%), radial-gradient(circle at 90% 80%, rgba(255,255,255,.08), transparent 34%); pointer-events: none; }
     .why .container { position: relative; z-index: 2; }
@@ -333,6 +344,8 @@
 
     @media (max-width: 850px) {
       .sample-preview-card { grid-template-columns: 1fr; }
+      .cleaning-card { grid-template-columns: 1fr; }
+      .cleaning-card img { min-height: 300px; }
       .sample-preview-visual { min-height: 300px; }
       .sample-board { width: 132px; height: 205px; }
       .sample-preview-content { padding: 44px; }
@@ -390,6 +403,7 @@
 
       <ul class="nav-links" aria-label="Primary navigation">
         <li><a href="#products">Products</a></li>
+        <li><a href="/carpet-cleaning">Carpet Cleaning</a></li>
         <li><a href="#specials">Specials</a></li>
         <li><a href="#process">Process</a></li>
         <li><a href="#why">Why Allen's</a></li>
@@ -406,6 +420,7 @@
 
     <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile navigation">
       <a href="#products">Products</a>
+      <a href="/carpet-cleaning">Carpet Cleaning</a>
       <a href="#specials">Specials</a>
       <a href="#process">Process</a>
       <a href="#why">Why Allen's</a>
@@ -422,7 +437,7 @@
         <div>
           <span class="eyebrow">Hannibal's trusted flooring showroom</span>
           <h1>Beautiful Floors. Local Service. Expert Installation.</h1>
-          <p>Carpet, luxury vinyl, hardwood, LVP, laminate, and expert installation from Allen's Carpet & Flooring in Hannibal, Missouri.</p>
+          <p>Carpet cleaning, carpet, luxury vinyl, hardwood, LVP, laminate, and expert installation from Allen's Carpet & Flooring in Hannibal, Missouri.</p>
 
           <div class="hero-actions">
             <a class="btn btn-primary scheduling-cta" href="/contact#schedule">Schedule Your Free In-Home Estimate</a>
@@ -445,8 +460,9 @@
             <input type="tel" name="Phone" placeholder="Phone" autocomplete="tel" inputmode="tel" maxlength="30" required />
             <input type="email" name="Email" placeholder="Email (optional)" aria-label="Email (optional)" autocomplete="email" inputmode="email" maxlength="254" />
             <select name="Flooring Type" required>
-              <option value="">What type of flooring?</option>
+              <option value="">What flooring or service do you need?</option>
               <option>Carpet</option>
+              <option>Carpet Cleaning</option>
               <option>Luxury Vinyl Plank</option>
               <option>Hardwood</option>
               <option>Laminate</option>
@@ -466,6 +482,20 @@
           </form>
           <div class="form-note">Prefer to talk? <a href="tel:5732210107"><strong>Call 573-221-0107</strong></a>.</div>
         </aside>
+      </div>
+    </section>
+
+    <section class="cleaning-feature" aria-labelledby="cleaning-feature-heading">
+      <div class="container">
+        <div class="cleaning-card">
+          <img src="assets/carpet-cleaning-family-room.jpg" alt="Family-room carpet shown before and after professional cleaning" loading="lazy" width="1776" height="1016" />
+          <div class="cleaning-copy">
+            <span class="eyebrow">Now offering carpet cleaning</span>
+            <h2 id="cleaning-feature-heading">Refresh the carpet you already love.</h2>
+            <p>Professional carpet cleaning can lift everyday soil, improve the look of busy pathways, and help rooms feel cared for again. See examples and learn what to expect.</p>
+            <a class="btn btn-primary" href="/carpet-cleaning">Explore Carpet Cleaning</a>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -739,6 +769,7 @@
           <div class="footer-heading">Shop</div>
           <div class="footer-links">
             <a href="#products">Carpet</a>
+            <a href="/carpet-cleaning">Carpet Cleaning</a>
             <a href="#products">Luxury Vinyl</a>
             <a href="#products">Hardwood</a>
             <a href="#products">LVP</a>

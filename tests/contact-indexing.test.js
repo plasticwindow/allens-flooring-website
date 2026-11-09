@@ -94,6 +94,7 @@ test("sitemap contains /contact and excludes the obsolete URL", () => {
   ].map((match) => match[1]);
 
   assert.ok(locations.includes(CONTACT_URL));
+  assert.ok(locations.includes(`${ORIGIN}/carpet-cleaning`));
   assert.ok(!locations.includes(LEGACY_CONTACT_URL));
 });
 
