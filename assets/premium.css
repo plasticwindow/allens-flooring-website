@@ -420,6 +420,10 @@ main > .map {
   box-shadow: var(--shadow-soft);
 }
 
+.cleaning-feature {
+  padding: 104px 0;
+}
+
 .cleaning-card img {
   min-height: 460px;
 }
@@ -538,6 +542,10 @@ details {
   }
 
   section {
+    padding: 72px 0;
+  }
+
+  .cleaning-feature {
     padding: 72px 0;
   }
 
