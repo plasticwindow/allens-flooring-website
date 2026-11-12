@@ -26,8 +26,11 @@ async function request(url) {
 for (const url of [
   "https://allenscarpetinc.com/allens-flooring",
   "https://allenscarpetinc.com/allens-flooring/",
+  "https://allenscarpetinc.com/about-us",
+  "https://allenscarpetinc.com/about-us/",
   "https://allenscarpetinc.com/home",
   "https://allenscarpetinc.com/home/",
+  "https://allenscarpetinc.com/index.html",
   "https://allenscarpetinc.com/?publisher=localcom_rbl&placement=octane360",
 ]) {
   test(`${url} permanently redirects to the canonical homepage`, async () => {
@@ -35,6 +38,21 @@ for (const url of [
 
     assert.equal(response.status, 301);
     assert.equal(response.headers.get("location"), CANONICAL_HOMEPAGE);
+    assert.equal(continued, false);
+  });
+}
+
+for (const [url, destination] of [
+  ["https://allenscarpetinc.com/contact.html", "https://allenscarpetinc.com/contact"],
+  ["https://allenscarpetinc.com/contact/", "https://allenscarpetinc.com/contact"],
+  ["https://allenscarpetinc.com/carpet-cleaning.html", "https://allenscarpetinc.com/carpet-cleaning"],
+  ["https://allenscarpetinc.com/carpet-cleaning/", "https://allenscarpetinc.com/carpet-cleaning"],
+]) {
+  test(`${url} permanently redirects to its clean canonical URL`, async () => {
+    const { continued, response } = await request(url);
+
+    assert.equal(response.status, 301);
+    assert.equal(response.headers.get("location"), destination);
     assert.equal(continued, false);
   });
 }
@@ -112,7 +130,14 @@ test("the homepage has no client-side redirect", () => {
   assert.doesNotMatch(homepageHtml, /location\.(?:href|replace)\s*[=(]/i);
 });
 
-const LEGACY_PATHS_FOR_AUDIT = new Set(["/allens-flooring", "/home"]);
+const LEGACY_PATHS_FOR_AUDIT = new Set([
+  "/about-us",
+  "/allens-flooring",
+  "/home",
+  "/index.html",
+  "/contact.html",
+  "/carpet-cleaning.html",
+]);
 
 function normalizedPathForAudit(pathname) {
   return pathname.length > 1 ? pathname.replace(/\/+$/, "") : pathname;

@@ -6,8 +6,9 @@
   <title>Carpet Cleaning in Hannibal, MO | Allen's Carpet & Flooring</title>
   <meta name="description" content="Professional carpet cleaning from Allen’s Carpet & Flooring in Hannibal, Missouri. See before-and-after results and request service for your home." />
   <meta name="robots" content="index, follow, max-image-preview:large" />
-  <meta name="theme-color" content="#17314f" />
+  <meta name="theme-color" content="#132d46" />
   <link rel="canonical" href="https://allenscarpetinc.com/carpet-cleaning" />
+  <link rel="preload" as="image" href="assets/carpet-cleaning-family-room.jpg" fetchpriority="high" />
   <link rel="icon" href="favicon.ico" sizes="32x32" />
   <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png" />
@@ -15,23 +16,86 @@
   <meta property="og:description" content="Refresh tired carpet with professional cleaning from a local flooring team." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://allenscarpetinc.com/carpet-cleaning" />
+  <meta property="og:site_name" content="Allen's Carpet & Flooring" />
+  <meta property="og:locale" content="en_US" />
   <meta property="og:image" content="https://allenscarpetinc.com/assets/carpet-cleaning-family-room.jpg" />
+  <meta property="og:image:width" content="1774" />
+  <meta property="og:image:height" content="887" />
   <meta property="og:image:alt" content="Family-room carpet shown before and after cleaning" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Carpet Cleaning in Hannibal, MO | Allen's Carpet & Flooring" />
+  <meta name="twitter:description" content="Refresh tired carpet with professional cleaning from a local Hannibal flooring team." />
+  <meta name="twitter:image" content="https://allenscarpetinc.com/assets/carpet-cleaning-family-room.jpg" />
 
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "Service",
-    "name": "Carpet Cleaning",
-    "description": "Professional residential carpet cleaning in Hannibal, Missouri and nearby communities.",
-    "provider": {
-      "@type": "HomeAndConstructionBusiness",
-      "@id": "https://allenscarpetinc.com/#business",
-      "name": "Allen's Carpet & Flooring Inc.",
-      "telephone": "+1-573-221-0107",
-      "url": "https://allenscarpetinc.com/"
-    },
-    "areaServed": ["Hannibal, MO", "Northeast Missouri", "Western Illinois"]
+    "@graph": [
+      {
+        "@type": "Service",
+        "@id": "https://allenscarpetinc.com/carpet-cleaning#service",
+        "name": "Residential Carpet Cleaning",
+        "serviceType": "Carpet cleaning",
+        "description": "Professional residential carpet cleaning in Hannibal, Missouri and nearby communities.",
+        "url": "https://allenscarpetinc.com/carpet-cleaning",
+        "provider": {
+          "@type": "HomeAndConstructionBusiness",
+          "@id": "https://allenscarpetinc.com/#business",
+          "name": "Allen's Carpet & Flooring Inc.",
+          "telephone": "+1-573-221-0107",
+          "url": "https://allenscarpetinc.com/"
+        },
+        "areaServed": [
+          { "@type": "City", "name": "Hannibal", "addressRegion": "MO" },
+          { "@type": "AdministrativeArea", "name": "Northeast Missouri" },
+          { "@type": "AdministrativeArea", "name": "Western Illinois" }
+        ]
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://allenscarpetinc.com/carpet-cleaning#webpage",
+        "url": "https://allenscarpetinc.com/carpet-cleaning",
+        "name": "Carpet Cleaning in Hannibal, MO | Allen's Carpet & Flooring",
+        "isPartOf": { "@id": "https://allenscarpetinc.com/#website" },
+        "about": { "@id": "https://allenscarpetinc.com/carpet-cleaning#service" },
+        "breadcrumb": { "@id": "https://allenscarpetinc.com/carpet-cleaning#breadcrumb" },
+        "inLanguage": "en-US"
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://allenscarpetinc.com/carpet-cleaning#breadcrumb",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://allenscarpetinc.com/" },
+          { "@type": "ListItem", "position": 2, "name": "Carpet Cleaning", "item": "https://allenscarpetinc.com/carpet-cleaning" }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://allenscarpetinc.com/carpet-cleaning#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Can every stain be removed?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Not every spot responds the same way. Carpet fiber, age, the source of the stain, and past treatments all affect the result." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can you clean stairs and hallways?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes. Tell us which rooms, halls, stairs, or landings need attention when you request service." }
+          },
+          {
+            "@type": "Question",
+            "name": "How should I prepare?",
+            "acceptedAnswer": { "@type": "Answer", "text": "When you contact us, we will explain what to move and what can stay in place based on the rooms being cleaned." }
+          },
+          {
+            "@type": "Question",
+            "name": "Do you clean carpet outside Hannibal?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Allen's serves Hannibal and communities across the surrounding Northeast Missouri and Western Illinois area. Call to confirm availability for your address." }
+          }
+        ]
+      }
+    ]
   }
   </script>
 
@@ -173,8 +237,10 @@
       .cta .actions { margin-top: 26px; }
     }
   </style>
+  <link rel="stylesheet" href="assets/premium.css" />
 </head>
 <body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
   <div class="top-strip">
     <div class="container">
       <div>Carpet cleaning · Flooring installation · Local service since 1958</div>
@@ -211,7 +277,7 @@
     </nav>
   </header>
 
-  <main>
+  <main id="main-content">
     <section class="hero">
       <div class="container">
         <div class="hero-copy">
@@ -255,21 +321,21 @@
         <div class="result-grid">
           <figure class="result-card">
             <div class="result-image">
-              <img src="assets/carpet-cleaning-family-room.jpg" alt="Family-room carpet before and after cleaning" width="1776" height="1016" />
+              <img src="assets/carpet-cleaning-family-room.jpg" alt="Family-room carpet before and after cleaning" loading="lazy" decoding="async" width="1774" height="887" />
               <div class="result-labels" aria-hidden="true"><span>Before</span><span>After</span></div>
             </div>
             <figcaption><strong>Family room refresh</strong>Everyday traffic and small spots are visibly reduced while the carpet keeps its natural character.</figcaption>
           </figure>
           <figure class="result-card">
             <div class="result-image">
-              <img src="assets/carpet-cleaning-stain.jpg" alt="Light living-room carpet with a spill stain before cleaning and refreshed carpet after cleaning" width="1776" height="1016" />
+              <img src="assets/carpet-cleaning-stain.jpg" alt="Light living-room carpet with a spill stain before cleaning and refreshed carpet after cleaning" loading="lazy" decoding="async" width="1774" height="887" />
               <div class="result-labels" aria-hidden="true"><span>Before</span><span>After</span></div>
             </div>
             <figcaption><strong>Spot and soil cleanup</strong>A focused cleanup helps the carpet look even and comfortable again.</figcaption>
           </figure>
           <figure class="result-card">
             <div class="result-image">
-              <img src="assets/carpet-cleaning-stairs.jpg" alt="Carpeted stairs and landing before and after cleaning" width="1536" height="1024" />
+              <img src="assets/carpet-cleaning-stairs.jpg" alt="Carpeted stairs and landing before and after cleaning" loading="lazy" decoding="async" width="1536" height="1024" />
               <div class="result-labels" aria-hidden="true"><span>Before</span><span>After</span></div>
             </div>
             <figcaption><strong>Stairs and landing</strong>Busy walking areas look brighter and more consistent after cleaning.</figcaption>
